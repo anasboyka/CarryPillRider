@@ -2,8 +2,14 @@ import 'dart:math';
 
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/models/all_enum.dart';
+import 'package:carrypill_rider/data/models/order_service.dart';
+import 'package:carrypill_rider/data/models/rider.dart';
+import 'package:carrypill_rider/data/models/rider_uid.dart';
 import 'package:carrypill_rider/presentation/custom_widgets/paint/timeline_paint.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
 const completeColor = Color(0xff5e6172);
@@ -11,7 +17,9 @@ const inProgressColor = Color(0xff5ec792);
 const todoColor = Color(0xffd1d2d7);
 
 class StatusTab extends StatefulWidget {
-  const StatusTab({Key? key}) : super(key: key);
+  OrderService orderService;
+
+  StatusTab({Key? key, required this.orderService}) : super(key: key);
 
   @override
   State<StatusTab> createState() => _StatusTabState();
@@ -54,6 +62,8 @@ class _StatusTabState extends State<StatusTab>
 
   @override
   Widget build(BuildContext context) {
+    final riderAuthstate = Provider.of<RiderAuth?>(context);
+    Rider? rider = Provider.of<Rider>(context);
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -72,7 +82,9 @@ class _StatusTabState extends State<StatusTab>
               height: 46,
               color: kcPrimary,
               shape: cornerR(r: 8),
-              onPressed: () {
+              onPressed: () async {
+                await FirestoreRepo().updateStatusOrder(
+                    StatusOrder.driverQueue, widget.orderService.documentID!);
                 setState(() {
                   currentStep = currentStep + 1;
                 });
@@ -104,8 +116,11 @@ class _StatusTabState extends State<StatusTab>
                   : Colors.transparent,
 
               shape: cornerR(r: 8),
-              onPressed: () {
+              onPressed: () async {
                 if (_processIndex >= _processes.length) {
+                  await FirestoreRepo().updateStatusOrder(
+                      StatusOrder.outForDelivery,
+                      widget.orderService.documentID!);
                   setState(() {
                     currentStep = currentStep + 1;
                   });
@@ -126,12 +141,18 @@ class _StatusTabState extends State<StatusTab>
               height: 46,
               color: kcPrimary,
               shape: cornerR(r: 8),
-              onPressed: () {
-                //todo database
-                // setState(() {
-                //   currentStep = currentStep + 1;
-                // });
-              }, //details.onStepContinue,
+              onPressed: () async {
+                await FirestoreRepo(uid: riderAuthstate!.uid)
+                    .updateOrderComplete(
+                  widget.orderService.documentID!,
+                  DateTime.now(),
+                  rider.isWorking,
+                );
+                // await FirestoreRepo().updateStatusOrder(
+                //     StatusOrder.orderArrived, widget.orderService.documentID!);
+                // await FirestoreRepo(uid: widget.orderService.riderRef)
+                //     .updateCurrentOrderId(null);
+              },
               child: Text(
                 "Drop-off",
                 style: kwtextStyleRD(
@@ -352,7 +373,6 @@ class _StatusTabState extends State<StatusTab>
                                   Color.lerp(prevColor, color, 0.5)!
                                 ];
                               }
-
                               return DecoratedLineConnector(
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
@@ -396,7 +416,13 @@ class _StatusTabState extends State<StatusTab>
                           backgroundColor: kcPrimary,
                           minimumSize: const Size(104, 30),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+                          print(_processIndex);
+                          if (_processIndex == 1) {
+                            await FirestoreRepo().updateStatusOrder(
+                                StatusOrder.orderPreparing,
+                                widget.orderService.documentID!);
+                          }
                           setState(() {
                             if (_processIndex != _processes.length) {
                               _processIndex = (_processIndex + 1);
@@ -469,7 +495,12 @@ class _StatusTabState extends State<StatusTab>
                           constraints:
                               const BoxConstraints(maxHeight: 25, maxWidth: 25),
                           alignment: Alignment.center,
-                          onPressed: () {},
+                          onPressed: () async {
+                            // await FirestoreRepo(uid: riderAuthstate!.uid)
+                            //     .updateOrderComplete(
+                            //         widget.orderService.documentID!,
+                            //         DateTime.now(),rider.isWorking);
+                          },
                           icon: const Icon(
                             Icons.location_on,
                             size: 20,

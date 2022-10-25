@@ -8,7 +8,6 @@ enum StatusOrder {
   orderPreparing,
   outForDelivery,
   orderArrived
-  // orderComplete
 }
 
 enum ServiceType {

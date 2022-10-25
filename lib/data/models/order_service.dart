@@ -11,11 +11,12 @@ class OrderService {
   ServiceType? serviceType;
   PaymentMethod? paymentMethod;
   double totalPay;
-
-  //DateTime? appointment;
   DateTime? orderDate;
-  DateTime? orderComplete;
+  DateTime? orderDateComplete;
+  String? orderQueryStatus;
   String? patientRef;
+  String? riderRef;
+  List<String>? riderCancelId;
   DocumentSnapshot? snapshot;
   DocumentReference? reference;
   String? documentID;
@@ -26,10 +27,12 @@ class OrderService {
     this.serviceType,
     this.paymentMethod,
     this.totalPay = 0,
-    //this.appointment,
     this.orderDate,
-    this.orderComplete,
+    this.orderDateComplete,
+    this.orderQueryStatus,
     this.patientRef,
+    this.riderRef,
+    this.riderCancelId,
     this.snapshot,
     this.reference,
     this.documentID,
@@ -53,8 +56,12 @@ class OrderService {
           : null,
       totalPay: map['totalPay'],
       orderDate: map['orderDate']?.toDate(),
-      orderComplete: map['orderComplete']?.toDate(),
+      orderDateComplete: map['orderDateComplete']?.toDate(),
+      orderQueryStatus: map['orderQueryStatus'],
       patientRef: map['patientRef'],
+      riderRef: map['riderRef'],
+      riderCancelId:
+          map['riderCancelId'] != null ? List.from(map['riderCancelId']) : null,
       // appointment: map['appointment']?.toDate(),
       snapshot: snapshot,
       reference: snapshot.reference,
@@ -80,9 +87,11 @@ class OrderService {
           : null,
       totalPay: map['totalPay'],
       orderDate: (map['orderDate']?.toDate()),
-      orderComplete: map['orderComplete']?.toDate(),
+      orderDateComplete: map['orderDateComplete']?.toDate(),
       patientRef: map['patientRef'],
       // appointment: map['appointment']?.toDate(),
+      riderCancelId:
+          map['riderCancelId'] != null ? List.from(map['riderCancelId']) : null,
     );
   }
 
@@ -93,38 +102,39 @@ class OrderService {
         'paymentMethod': paymentMethod?.name,
         'totalPay': totalPay,
         'orderDate': orderDate,
-        'orderComplete': orderComplete,
-        'patientRef': patientRef
+        'orderDateComplete': orderDateComplete,
+        'patientRef': patientRef,
+        'riderCancelId': riderCancelId
         // 'appointment': appointment,
       };
 
-  OrderService copyWith({
-    required final List<Clinic> clinicList,
-    final StatusOrder? statusOrder,
-    final ServiceType? serviceType,
-    final PaymentMethod? paymentMethod,
-    final double? totalPay,
-    final DateTime? orderDate,
-    final DateTime? orderComplete,
-    final DateTime? appointment,
-    final String? patientRef,
-  }) {
-    return OrderService(
-      // clinicList: clinicList,
-      statusOrder: statusOrder ?? this.statusOrder,
-      serviceType: serviceType ?? this.serviceType,
-      paymentMethod: paymentMethod ?? this.paymentMethod,
-      totalPay: totalPay ?? this.totalPay,
-      orderDate: orderDate ?? this.orderDate,
-      orderComplete: orderComplete ?? this.orderComplete,
-      patientRef: patientRef ?? this.patientRef,
-      // appointment: appointment ?? this.appointment,
-    );
-  }
+  // OrderService copyWith({
+  //   required final List<Clinic> clinicList,
+  //   final StatusOrder? statusOrder,
+  //   final ServiceType? serviceType,
+  //   final PaymentMethod? paymentMethod,
+  //   final double? totalPay,
+  //   final DateTime? orderDate,
+  //   final DateTime? orderDateComplete,
+  //   final DateTime? appointment,
+  //   final String? patientRef,
+  // }) {
+  //   return OrderService(
+  //     // clinicList: clinicList,
+  //     statusOrder: statusOrder ?? this.statusOrder,
+  //     serviceType: serviceType ?? this.serviceType,
+  //     paymentMethod: paymentMethod ?? this.paymentMethod,
+  //     totalPay: totalPay ?? this.totalPay,
+  //     orderDate: orderDate ?? this.orderDate,
+  //     orderDateComplete: orderDateComplete ?? this.orderDateComplete,
+  //     patientRef: patientRef ?? this.patientRef,
+  //     // appointment: appointment ?? this.appointment,
+  //   );
+  // }
 
   @override
   String toString() {
-    return '{clinicList.toString()}, ${statusOrder.toString()}, ${orderDate.toString()}, ${orderComplete.toString()},${totalPay.toString()},${paymentMethod.toString()},${orderDate.toString()},${serviceType.toString()},${patientRef.toString()} ';
+    return '{clinicList.toString()}, ${statusOrder.toString()}, ${orderDate.toString()}, ${orderDateComplete.toString()},${totalPay.toString()},${paymentMethod.toString()},${orderDate.toString()},${serviceType.toString()},${patientRef.toString()} ';
   }
 
   @override

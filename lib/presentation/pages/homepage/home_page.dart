@@ -1,10 +1,13 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/delivery_tab.dart';
+import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/delivery_wrapper.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/history_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/map_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,16 +17,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    final rider = Provider.of<Rider?>(context);
+    print(rider?.firstName);
     return Scaffold(
       backgroundColor: kcBgHome,
-      // appBar: AppBar(
-      //   title: const Text('Homepage'),
-      // ),
       body: IndexedStack(
+        index: _currentIndex,
         children: [
-          DeliveryTab(),
+          DeliveryWrapper(),
           MapTab(),
           HistoryTab(),
           ProfileTab(),
@@ -76,7 +81,11 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
     );
   }

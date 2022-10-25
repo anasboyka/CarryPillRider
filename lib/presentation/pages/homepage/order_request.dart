@@ -37,7 +37,9 @@ class _OrderRequestState extends State<OrderRequest> {
         ),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
               child: Text(
                 'Decline',
                 style: kwtextStyleRD(fs: 22, fw: FontWeight.bold, c: kcPrimary),
@@ -148,7 +150,9 @@ class _OrderRequestState extends State<OrderRequest> {
                           minWidth: double.infinity,
                           height: 64,
                           color: kcPrimary,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          },
                           child: const Text(
                             'Accept',
                             style: kwstyleBtn20b,

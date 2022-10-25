@@ -46,6 +46,8 @@ dependencies:
   mongo_dart: ^0.7.4+1
   provider: ^6.0.3
   shared_preferences: ^2.0.15
+  test: any
+  bloc_test: any
   timelines: ^0.1.0
   url_launcher: ^6.1.4
 

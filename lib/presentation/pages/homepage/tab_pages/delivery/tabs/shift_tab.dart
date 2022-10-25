@@ -1,21 +1,26 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
+import 'package:carrypill_rider/constant/constant_string.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/models/rider.dart';
+import 'package:carrypill_rider/data/models/rider_uid.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ShiftTab extends StatefulWidget {
-  const ShiftTab({Key? key}) : super(key: key);
+class ShiftTab extends StatelessWidget {
+  Rider rider;
+  ShiftTab({
+    required this.rider,
+    Key? key,
+  }) : super(key: key);
 
-  @override
-  State<ShiftTab> createState() => _ShiftTabState();
-}
-
-class _ShiftTabState extends State<ShiftTab> {
-  bool isWorking = true;
   @override
   Widget build(BuildContext context) {
+    final riderAuthstate = Provider.of<RiderAuth?>(context);
     return Padding(
       padding: padSymR(),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           gaphr(h: 44),
           Container(
@@ -25,29 +30,33 @@ class _ShiftTabState extends State<ShiftTab> {
                 borderRadius: borderRadiuscR(r: 8),
                 boxShadow: [
                   BoxShadow(
-                    offset: const Offset(0, 3),
-                    blurRadius: 6,
-                    color: Colors.black.withOpacity(0.16),
-                  )
+                    offset: const Offset(0, 2),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    color: Colors.black.withOpacity(0.15),
+                  ),
                 ]),
             child: Padding(
-              padding: padSymR(),
+              padding: padSymR(v: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  gaphr(h: 16),
                   Text(
-                    'Aug 1 - 4,2022',
-                    style:
-                        kwtextStyleRD(fw: FontWeight.w500, fs: 16, c: kcBlack2),
+                    'Aug 1 - 15, 2022',
+                    style: kwtextStyleRD(
+                      fs: 16,
+                      fw: FontWeight.w500,
+                    ),
                   ),
                   gaphr(h: 8),
                   Text(
-                    '+RM 72.00',
-                    style:
-                        kwtextStyleRD(fw: FontWeight.bold, fs: 16, c: kcProfit),
-                  ),
-                  gaphr(h: 15),
+                    '+RM 432.00',
+                    style: kwtextStyleRD(
+                      fs: 16,
+                      fw: FontWeight.bold,
+                      c: kcProfit,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -56,18 +65,23 @@ class _ShiftTabState extends State<ShiftTab> {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-                borderRadius: borderRadiuscR(r: 17),
-                color: kcWhite,
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 3),
-                    blurRadius: 6,
-                    color: Colors.black.withOpacity(0.16),
-                  )
-                ]),
+              color: kcWhite,
+              borderRadius: borderRadiuscR(r: 8),
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 2),
+                  blurRadius: 5,
+                  spreadRadius: 1,
+                  color: Colors.black.withOpacity(0.1),
+                ),
+              ],
+            ),
             child: Padding(
-              padding: padSymR(v: 20),
+              padding: padSymR(
+                v: 20,
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: double.infinity,
@@ -88,7 +102,9 @@ class _ShiftTabState extends State<ShiftTab> {
                   Row(
                     children: [
                       Text(
-                        isWorking ? "Recent profit: " : "Current profit: ",
+                        rider.isWorking
+                            ? "Recent profit: "
+                            : "Current profit: ",
                         style: kwtextStyleRD(
                           fs: 18,
                           fw: FontWeight.w500,
@@ -103,7 +119,7 @@ class _ShiftTabState extends State<ShiftTab> {
                   ),
                   gaphr(),
                   Text(
-                    isWorking
+                    rider.isWorking
                         ? 'Recomended work time : 3 hours'
                         : 'Current working hours: 3 hours',
                     style: kwtextStyleRD(
@@ -111,8 +127,8 @@ class _ShiftTabState extends State<ShiftTab> {
                       fw: FontWeight.w500,
                     ),
                   ),
-                  gaphr(h: isWorking ? 0 : 20),
-                  isWorking
+                  gaphr(h: rider.isWorking ? 0 : 20),
+                  rider.isWorking
                       ? const SizedBox()
                       : const Text(
                           'are you ready?',
@@ -126,9 +142,16 @@ class _ShiftTabState extends State<ShiftTab> {
                     shape: cornerR(
                       r: 8,
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await FirestoreRepo(uid: riderAuthstate!.uid)
+                          .updateWorkingStatus(
+                              !rider.isWorking,
+                              rider.isWorking
+                                  ? ksStopAcceptingOrder
+                                  : ksIsWaitingForOrder);
+                    },
                     child: Text(
-                      isWorking ? 'End Shift' : 'Start Working Now',
+                      rider.isWorking ? 'End Shift' : 'Start Working Now',
                       style: kwtextStyleRD(
                           c: kcWhite, fs: 20, fw: FontWeight.bold),
                     ),

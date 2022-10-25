@@ -167,6 +167,14 @@ SizedBox gapw({double w = 20}) {
   return SizedBox(width: w);
 }
 
+Future kwShowSnackbar(BuildContext context, String message,
+    {int seconds = 4}) async {
+  return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(message),
+    duration: Duration(seconds: seconds),
+  ));
+}
+
 SizedBox gaph({double h = 20}) {
   return SizedBox(height: h);
 }
