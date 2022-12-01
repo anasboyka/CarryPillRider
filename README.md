@@ -5,8 +5,7 @@ This project is a mobile application that is used for rider to deliver medicine 
 ## 10 new changes
 
 
-1. Update profile
-2. update working status
-3. update order status
-4. view order history
-5. check patient's location
+1. Add order status option
+2. Decline order
+3. View service history
+4. View patient current address
