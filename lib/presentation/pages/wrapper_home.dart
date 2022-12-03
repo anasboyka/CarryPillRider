@@ -18,12 +18,15 @@ class WrapperHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // AuthRepo().signOut();
+    //AuthRepo().signOut();
     final riderAuthstate = Provider.of<RiderAuth?>(context);
+
     if (riderAuthstate != null) {
+      print(riderAuthstate.uid);
       return StreamBuilder(
           stream: FirestoreRepo(uid: riderAuthstate.uid).rider,
           builder: (_, AsyncSnapshot snapshot) {
+            print(snapshot);
             if (snapshot.hasData) {
               Rider rider = snapshot.data;
               bool isProfileComplete = rider.isProfileComplete ?? false;
@@ -38,6 +41,7 @@ class WrapperHome extends StatelessWidget {
                 return RegisterInfo();
               }
             } else {
+              print('here');
               return Center(
                 child: CircularProgressIndicator.adaptive(),
               );

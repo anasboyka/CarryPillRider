@@ -78,7 +78,7 @@ class _SignUpState extends State<SignUp> {
                             iconSize: 35,
                             onPressed: () async {
                               AuthRepo().signInWithEmailAndPassword(
-                                  'testrider2@gmail.com', '123456');
+                                  'testfirst@gmail.com', '123456');
                               // BlocProvider.of<AuthCubit>(context)
                               //     .loadingStart();
                               //Navigator.of(context).pop();
@@ -194,7 +194,7 @@ class _SignUpState extends State<SignUp> {
                           gapwr(w: 10),
                           Expanded(
                             child: TextFormField(
-                              controller: emailCon,
+                              controller: phoneNumCon,
                               style: kwtextStyleRD(
                                 c: kcPrimary,
                                 fs: 18,
@@ -272,9 +272,9 @@ class _SignUpState extends State<SignUp> {
                         onPressed: () async {
                           //TODO sign up
                           Rider rider = Rider(
-                            firstName: 'mat3',
-                            lastName: 'anas',
-                            phoneNum: '0123456789',
+                            firstName: 'Alif',
+                            lastName: 'Zakwan',
+                            phoneNum: '0123459876',
                             vehicleType: 'kereyta',
                             workingStatus: 'not working',
                             isWorking: false,

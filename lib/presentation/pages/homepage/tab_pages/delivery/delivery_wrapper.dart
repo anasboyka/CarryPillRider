@@ -109,18 +109,23 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
         OrderService orderService =
             await FirestoreRepo().getCurrentOrder(rider.currentOrderId!);
         if (!mounted) return;
-        if (await handleOrder(riderId, orderService)) {
-          await FirestoreRepo().updateOrderAccepted(rider.currentOrderId!);
-          await Future.delayed(const Duration(seconds: 2));
-          await FirestoreRepo().updateStatusOrder(
-              StatusOrder.driverToHospital, rider.currentOrderId!);
-          streamSubscription?.cancel().then((_) => streamSubscription = null);
-        } else {
+        if (!await handleOrder(riderId, orderService)) {
           if (streamSubscription!.isPaused) {
             streamSubscription?.resume();
           }
-          //todo reject order list
         }
+        // if (await handleOrder(riderId, orderService)) {
+        //   await FirestoreRepo().updateOrderAccepted(rider.currentOrderId!);
+        //   await Future.delayed(const Duration(seconds: 2));
+        //   await FirestoreRepo().updateStatusOrder(
+        //       StatusOrder.driverToHospital, rider.currentOrderId!);
+        //   streamSubscription?.cancel().then((_) => streamSubscription = null);
+        // } else {
+        //   if (streamSubscription!.isPaused) {
+        //     streamSubscription?.resume();
+        //   }
+        //   //todo reject order list
+        // }
       }
     });
   }
@@ -179,11 +184,15 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
         streamSubscription?.cancel().then((_) => streamSubscription = null);
         await FirestoreRepo(uid: riderId)
             .updateOrderAccepted(order.documentID!);
+        await Future.delayed(const Duration(seconds: 4));
+        await FirestoreRepo()
+            .updateStatusOrder(StatusOrder.driverToHospital, order.documentID!);
         await FirestoreRepo(uid: riderId)
             .updateCurrentOrderId(order.documentID!);
         return true;
       } else {
-        await FirestoreRepo(uid: riderId).updateOrderRejected([riderId]);
+        await FirestoreRepo(uid: riderId)
+            .updateOrderRejected([order.documentID!]);
         return false;
       }
     });

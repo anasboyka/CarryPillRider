@@ -190,9 +190,14 @@ class FirestoreRepo {
   // }
 
   Future updateOrderRejected(List<String> ordersId) async {
-    return await riderCollection.doc(uid).update({
+    await riderCollection.doc(uid).update({
       'orderCancelId': FieldValue.arrayUnion(ordersId),
       'workingStatus': 'isWaitingForOrder',
+      'currentOrderId': null,
+    });
+    print(ordersId[0]);
+    await orderCollection.doc(ordersId[0]).update({
+      'riderPending': false,
     });
   }
 

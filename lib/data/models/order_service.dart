@@ -17,6 +17,7 @@ class OrderService {
   String? patientRef;
   String? riderRef;
   List<String>? riderCancelId;
+  bool? riderPending;
   DocumentSnapshot? snapshot;
   DocumentReference? reference;
   String? documentID;
@@ -33,6 +34,7 @@ class OrderService {
     this.patientRef,
     this.riderRef,
     this.riderCancelId,
+    this.riderPending,
     this.snapshot,
     this.reference,
     this.documentID,
@@ -62,6 +64,7 @@ class OrderService {
       riderRef: map['riderRef'],
       riderCancelId:
           map['riderCancelId'] != null ? List.from(map['riderCancelId']) : null,
+      riderPending: map['riderPending'],
       // appointment: map['appointment']?.toDate(),
       snapshot: snapshot,
       reference: snapshot.reference,
@@ -104,7 +107,8 @@ class OrderService {
         'orderDate': orderDate,
         'orderDateComplete': orderDateComplete,
         'patientRef': patientRef,
-        'riderCancelId': riderCancelId
+        'riderCancelId': riderCancelId,
+        'riderPending': riderPending,
         // 'appointment': appointment,
       };
 
