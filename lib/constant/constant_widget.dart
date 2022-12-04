@@ -191,6 +191,14 @@ Text textBtn15(
   );
 }
 
+Container dividerC({Color c = kcDivider, double t = 1}) {
+  return Container(
+    color: c,
+    height: t,
+    width: double.infinity,
+  );
+}
+
 Divider divider({Color c = kcDivider, double t = 1}) {
   return Divider(
     color: c,
@@ -249,14 +257,26 @@ InputDecoration inputDeco({
   bool isPassword = false,
   bool isHidden = true,
   void Function()? onPressedTrailing,
+  double radius = 10,
+  double borderWidth = 1,
+  Color borderColor = kcborderGrey,
+  Color borderEnableColor = kcborderGrey,
+  Color borderFocusColor = kcPrimary,
+  Color borderErrorColor = kcRedRequired,
+  Color borderDisabledColor = kcUnderlineBorder,
+  EdgeInsetsGeometry contentPadding = const EdgeInsets.all(20),
+  double fsHint = 18,
+  FontWeight fwHint = kfsemibold,
+  bool dense = false,
 }) {
   return InputDecoration(
-    contentPadding: const EdgeInsets.all(20),
+    contentPadding: contentPadding,
+    isDense: dense,
     hintText: hint,
     hintStyle: kwtextStyleRD(
-      c: enabled ? kchintTextfield : kcUnderlineBorder,
-      fs: 18,
-      fw: FontWeight.w600,
+      c: enabled ? borderEnableColor : borderDisabledColor,
+      fs: fsHint,
+      fw: fwHint,
     ),
     suffixIcon: isPassword
         ? Material(
@@ -277,27 +297,27 @@ InputDecoration inputDeco({
           )
         : null,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.r),
+      borderRadius: BorderRadius.circular(radius.r),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.r),
-      borderSide: const BorderSide(
-        color: kcborderGrey,
-        width: 3,
+      borderRadius: BorderRadius.circular(radius.r),
+      borderSide: BorderSide(
+        color: borderEnableColor,
+        width: borderWidth, //3
       ),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.r),
-      borderSide: const BorderSide(
-        color: kcPrimary,
-        width: 3,
+      borderRadius: BorderRadius.circular(radius.r),
+      borderSide: BorderSide(
+        color: borderFocusColor,
+        width: borderWidth,
       ),
     ),
     disabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.r),
-      borderSide: const BorderSide(
-        color: kcUnderlineBorder,
-        width: 3,
+      borderRadius: BorderRadius.circular(radius.r),
+      borderSide: BorderSide(
+        color: borderDisabledColor,
+        width: borderWidth,
       ),
     ),
   );

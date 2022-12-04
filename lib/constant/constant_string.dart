@@ -36,10 +36,14 @@ const ksCurrentLocationRider = 'currrentLocation';
 const ksIsProfileCompleteRider = 'isProfileComplete';
 
 //variable status constant
+//order
 const ksStopAcceptingOrder = 'stopAcceptingOrder';
 const ksIsWaitingForOrder = 'isWaitingForOrder';
 const ksIsPendingOrder = 'isPendingOrder';
 const ksDeliveringOrder = 'deliveringOrder';
+
+//rider
+const ksNotWorking = 'not working';
 
 //error constant
 const ksErrorEmailAlreadyUsed = "Email already used";
@@ -49,3 +53,7 @@ const ksErrorUserDisabled = "User disabled.";
 const ksErrorToManyRequest = "Too many requests to log into this account.";
 const ksErrorOperationNotAllowed = "Server error, please try again later.";
 const ksErrorInvalidEmail = "Email address is invalid.";
+
+
+//other
+

@@ -38,7 +38,10 @@ const kcstatusGreen = Color(0xFF50957A);
 const kcProfit = Color(0xFF3EA34F);
 const kcsubtitle3 = Color(0xFF555555);
 const kcBlack2 = Color(0xFF212121);
-const ktest = Color(0xFF2E3A59);
+const kcTransparent = Colors.transparent;
+const kcRedRequired = Color(0xFFEA4343);
+const kcImageContainer = Color(0xFFFBFBFB);
+const kctest = Color(0xFF2E3A59);
 
 final kcboxshadow = const Color(0xFF333333).withOpacity(0.03);
 

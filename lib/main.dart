@@ -35,11 +35,13 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'CarryPill Rider',
             theme: ThemeData(
-                primarySwatch: kcprimarySwatch,
-                appBarTheme: const AppBarTheme(
-                  backgroundColor: kcWhite,
-                  elevation: 3,
-                )),
+              primarySwatch: kcprimarySwatch,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: kcWhite,
+                elevation: 3,
+                iconTheme: IconThemeData(color: kcPrimary),
+              ),
+            ),
             initialRoute: '/',
             onGenerateRoute: RouteGenerator.generateRoute,
           );
