@@ -1,3 +1,4 @@
+import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:carrypill_rider/main.dart';
 import 'package:carrypill_rider/presentation/pages/authenticate/register_info/profile_info.dart';
 import 'package:carrypill_rider/presentation/pages/authenticate/register_info/vehicle_info.dart';
@@ -22,9 +23,13 @@ class RouteGenerator {
       case '/orderrequest':
         return CupertinoPageRoute(builder: (_) => OrderRequest());
       case '/profileinfo':
-        return CupertinoPageRoute(builder: (_) => ProfileInfo());
+        return CupertinoPageRoute(
+            builder: (_) => ProfileInfo(
+                  rider: args as Rider,
+                ));
       case '/vehicleinfo':
-        return CupertinoPageRoute(builder: (_) => VehicleInfo());
+        return CupertinoPageRoute(
+            builder: (_) => VehicleInfo(rider: args as Rider));
       default:
         return CupertinoPageRoute(builder: (_) => WrapperHome());
     }

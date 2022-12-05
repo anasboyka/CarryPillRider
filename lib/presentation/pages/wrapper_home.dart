@@ -24,11 +24,11 @@ class WrapperHome extends StatelessWidget {
     final riderAuthstate = Provider.of<RiderAuth?>(context);
 
     if (riderAuthstate != null) {
-      print(riderAuthstate.uid);
+      // print(riderAuthstate.uid);
       return StreamBuilder(
           stream: FirestoreRepo(uid: riderAuthstate.uid).rider,
           builder: (_, AsyncSnapshot snapshot) {
-            print(snapshot);
+            // print(snapshot);
             if (snapshot.hasData) {
               Rider rider = snapshot.data;
               bool isProfileComplete = rider.isProfileComplete ?? false;
@@ -40,12 +40,16 @@ class WrapperHome extends StatelessWidget {
                 );
               } else {
                 //TODO complete profile page
-                return RegisterInfo();
+                return StreamProvider<Rider?>.value(
+                  initialData: rider,
+                  value: FirestoreRepo(uid: riderAuthstate.uid).rider,
+                  child: RegisterInfo(),
+                );
                 //return ProfileInfo();
                 //return VehicleInfo();
               }
             } else {
-              print('here');
+              // print('here');
               return Center(
                 child: CircularProgressIndicator.adaptive(),
               );

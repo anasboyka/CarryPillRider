@@ -256,6 +256,7 @@ InputDecoration inputDeco({
   bool enabled = true,
   bool isPassword = false,
   bool isHidden = true,
+  bool isDate = false,
   void Function()? onPressedTrailing,
   double radius = 10,
   double borderWidth = 1,
@@ -295,7 +296,11 @@ InputDecoration inputDeco({
                     ),
             ),
           )
-        : null,
+        : isDate
+            ? IconButton(
+                onPressed: onPressedTrailing,
+                icon: const Icon(Icons.date_range_rounded))
+            : null,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(radius.r),
     ),

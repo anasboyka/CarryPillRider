@@ -358,7 +358,7 @@ class _SignUpState extends State<SignUp> {
                                   await FirestoreRepo(uid: result.user!.uid)
                                       .createRider(rider);
                                   //TODO navigation
-                                  print('pass navigation');
+                                  // print('pass navigation');
                                 } else {
                                   if (!mounted) return;
                                   kwShowSnackbar(context, "Error Sign Up");

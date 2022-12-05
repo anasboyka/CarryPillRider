@@ -42,7 +42,7 @@ class Profile {
   factory Profile.fromMap(Map<String, dynamic> map) {
     return Profile(
       profileImageUrl: map['profileImageUrl'],
-      birthDate: map['birthDate'],
+      birthDate: map['birthDate']?.toDate(),
       gender: map['gender'],
       icNum: map['icNum'],
       address: map['address'],

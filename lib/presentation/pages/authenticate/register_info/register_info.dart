@@ -1,6 +1,8 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterInfo extends StatefulWidget {
   const RegisterInfo({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class RegisterInfo extends StatefulWidget {
 class _RegisterInfoState extends State<RegisterInfo> {
   @override
   Widget build(BuildContext context) {
+    Rider rider = Provider.of<Rider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -78,10 +81,12 @@ class _RegisterInfoState extends State<RegisterInfo> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Required',
+                          rider.profile == null ? 'Required' : 'Completed',
                           style: kwtextStyleRD(
                             fs: 14,
-                            c: kcRedRequired,
+                            c: rider.profile == null
+                                ? kcRedRequired
+                                : kcstatusGreen,
                             fw: kfmedium,
                           ),
                         ),
@@ -93,7 +98,8 @@ class _RegisterInfoState extends State<RegisterInfo> {
                       ],
                     ),
                     onTap: () {
-                      Navigator.of(context).pushNamed('/profileinfo');
+                      Navigator.of(context)
+                          .pushNamed('/profileinfo', arguments: rider);
                       print('tap');
                     },
                     contentPadding: padSymR(),
@@ -123,10 +129,12 @@ class _RegisterInfoState extends State<RegisterInfo> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Required',
+                          rider.vehicle == null ? 'Required' : 'Completed',
                           style: kwtextStyleRD(
                             fs: 14,
-                            c: kcRedRequired,
+                            c: rider.vehicle == null
+                                ? kcRedRequired
+                                : kcstatusGreen,
                             fw: kfmedium,
                           ),
                         ),
@@ -137,8 +145,8 @@ class _RegisterInfoState extends State<RegisterInfo> {
                       ],
                     ),
                     onTap: () {
-                      Navigator.of(context).pushNamed('/vehicleinfo');
-                      print('tap');
+                      Navigator.of(context)
+                          .pushNamed('/vehicleinfo', arguments: rider);
                     },
                     contentPadding: padSymR(),
                   ),
@@ -149,6 +157,28 @@ class _RegisterInfoState extends State<RegisterInfo> {
                 ),
               ],
             ),
+            const Spacer(),
+            Padding(
+              padding: padSymR(),
+              child: MaterialButton(
+                minWidth: double.infinity,
+                height: 64,
+                color: kcPrimary,
+                shape: cornerR(r: 12),
+                onPressed: () {
+                  //todo complete sign up
+                },
+                child: Text(
+                  'Save',
+                  style: kwtextStyleRD(
+                    fs: 20,
+                    fw: kfbold,
+                    c: kcWhite,
+                  ),
+                ),
+              ),
+            ),
+            gaphr(h: 30),
           ],
         ),
       ),

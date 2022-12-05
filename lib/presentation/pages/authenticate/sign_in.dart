@@ -70,7 +70,7 @@ class _SignInState extends State<SignIn> {
         gaphr(h: 40),
         TextFormField(
           onChanged: (value) {
-            print(value);
+            // print(value);
             if (passcon.text.isNotEmpty && value != "") {
               setState(() {
                 isComplete = true;

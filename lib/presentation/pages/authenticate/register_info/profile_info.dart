@@ -1,12 +1,24 @@
+import 'dart:io';
+
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/dataproviders/firebase_providers/firestore_provider.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/storage_repo.dart';
+import 'package:carrypill_rider/data/models/profile.dart';
+import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:image/image.dart' as img;
 
 class ProfileInfo extends StatefulWidget {
-  const ProfileInfo({Key? key}) : super(key: key);
+  final Rider rider;
+  const ProfileInfo({Key? key, required this.rider}) : super(key: key);
 
   @override
   State<ProfileInfo> createState() => _ProfileInfoState();
@@ -15,7 +27,9 @@ class ProfileInfo extends StatefulWidget {
 class _ProfileInfoState extends State<ProfileInfo> {
   final dateOfBirthcon = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String? gender;
+  DateTime? _dateBirth;
+  String? gender, filePath, fileName;
+  File? file;
   List<String> genders = ["Male", "Female"];
   @override
   Widget build(BuildContext context) {
@@ -45,26 +59,37 @@ class _ProfileInfoState extends State<ProfileInfo> {
                 gaphr(),
                 Align(
                   alignment: Alignment.center,
-                  child: DottedBorder(
-                    dashPattern: const [7, 7],
-                    color: kcborderGrey,
-                    strokeWidth: 1,
-                    child: Container(
-                      height: 136.w,
-                      width: 136.w,
-                      decoration: BoxDecoration(
-                        color: kcImageContainer,
-                        borderRadius: borderRadiuscR(r: 4),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.add_a_photo,
-                          color: kcgrey,
-                          size: 40,
+                  child: filePath == null
+                      ? DottedBorder(
+                          dashPattern: const [7, 7],
+                          color: kcborderGrey,
+                          strokeWidth: 1,
+                          child: Container(
+                            height: 136.w,
+                            width: 136.w,
+                            decoration: BoxDecoration(
+                              color: kcImageContainer,
+                              borderRadius: borderRadiuscR(r: 4),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.add_a_photo,
+                                color: kcgrey,
+                                size: 40,
+                              ),
+                            ),
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: borderRadiuscR(r: 4),
+                          child: SizedBox(
+                            height: 136.w,
+                            width: 300.w,
+                            child: Image.file(
+                              File(filePath!),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ),
                 Align(
                   alignment: Alignment.center,
@@ -73,7 +98,42 @@ class _ProfileInfoState extends State<ProfileInfo> {
                     height: 26,
                     color: kcPrimary,
                     shape: cornerR(r: 4),
-                    onPressed: () {},
+                    onPressed: () async {
+                      final results = await FilePicker.platform.pickFiles(
+                        allowMultiple: false,
+                        type: FileType.image,
+                      );
+                      print(results);
+                      if (results != null) {
+                        final path = results.files.single.path!;
+                        //File file = File(path);
+                        // Image(image: FileImage(file))
+                        //     .image
+                        //     .resolve(const ImageConfiguration())
+                        //     .addListener(
+                        //   ImageStreamListener(
+                        //     (ImageInfo info, bool syncCall) {
+                        //       int width = info.image.width;
+                        //       int height = info.image.height;
+                        //       print(width);
+                        //       print(height);
+                        //     },
+                        //   ),
+                        // );
+                        final img.Image? image =
+                            img.decodeImage(await File(path).readAsBytes());
+                        final img.Image orientedImage =
+                            img.bakeOrientation(image!);
+                        File newfile = await File(path)
+                            .writeAsBytes(img.encodeJpg(orientedImage));
+
+                        setState(() {
+                          file = newfile;
+                          filePath = path;
+                          fileName = results.files.single.name;
+                        });
+                      }
+                    },
                     child: Text(
                       'Browse file',
                       style: kwtextStyleRD(fs: 14, fw: kfbold, c: kcWhite),
@@ -101,12 +161,16 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           }
                           return null;
                         },
+                        readOnly: true,
+                        onTap: () async => pickDate(),
                         decoration: inputDeco(
+                          isDate: true,
                           contentPadding: padSymR(),
                           borderColor: kchintTextfield,
                           borderEnableColor: kchintTextfield,
                           fsHint: 14,
                           fwHint: kfregular,
+                          onPressedTrailing: pickDate,
                         ),
                       ),
                       gaphr(),
@@ -158,7 +222,36 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   height: 64,
                   color: kcPrimary,
                   shape: cornerR(r: 12),
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (filePath != null && gender != null) {
+                        //todo storage
+                        final String? url =
+                            await StorageRepo(uid: widget.rider.documentID)
+                                .uploadRiderProfileImage(filePath!, fileName!);
+                        print(url);
+                        if (url != null) {
+                          Profile profile = Profile(
+                              gender: gender,
+                              profileImageUrl: url,
+                              birthDate: _dateBirth);
+                          await FirestoreRepo(uid: widget.rider.documentID)
+                              .updateRiderProfileInfo(profile);
+                          if (!mounted) return;
+                          Navigator.of(context).pop();
+                        } else {
+                          if (!mounted) return;
+                          kwShowSnackbar(context, 'error upload file');
+                        }
+                      } else {
+                        kwShowSnackbar(context,
+                            'Please fill in all the required information');
+                      }
+                    } else {
+                      kwShowSnackbar(context,
+                          'Please fill in all the required information');
+                    }
+                  },
                   child: Text(
                     'Save',
                     style: kwtextStyleRD(
@@ -197,5 +290,22 @@ class _ProfileInfoState extends State<ProfileInfo> {
         ),
       ],
     );
+  }
+
+  void pickDate() async {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1800),
+      lastDate: DateTime.now(),
+    ).then((date) {
+      if (date == null) {
+        return;
+      }
+      setState(() {
+        _dateBirth = date;
+        dateOfBirthcon.text = DateFormat("dd MMMM, yyyy").format(_dateBirth!);
+      });
+    });
   }
 }

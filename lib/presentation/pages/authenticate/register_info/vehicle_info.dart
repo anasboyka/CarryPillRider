@@ -1,12 +1,21 @@
+import 'dart:io';
+
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/storage_repo.dart';
+import 'package:carrypill_rider/data/models/rider.dart';
+import 'package:carrypill_rider/data/models/vehicle.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image/image.dart' as img;
 
 class VehicleInfo extends StatefulWidget {
-  const VehicleInfo({Key? key}) : super(key: key);
+  final Rider rider;
+  const VehicleInfo({Key? key, required this.rider}) : super(key: key);
 
   @override
   State<VehicleInfo> createState() => _VehicleInfoState();
@@ -15,6 +24,8 @@ class VehicleInfo extends StatefulWidget {
 class _VehicleInfoState extends State<VehicleInfo> {
   final plateNumCon = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String? fileName;
+  File? file;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,30 +82,40 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     ],
                   ),
                 ),
-                titleInput('Vehicle Road Tax'),
+                titleInput('Driver\'s License'),
                 gaphr(),
                 Align(
                   alignment: Alignment.center,
-                  child: DottedBorder(
-                    dashPattern: const [7, 7],
-                    color: kcborderGrey,
-                    strokeWidth: 1,
-                    child: Container(
-                      height: 136.w,
-                      width: 220.w,
-                      decoration: BoxDecoration(
-                        color: kcImageContainer,
-                        borderRadius: borderRadiuscR(r: 4),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.add_a_photo,
-                          color: kcgrey,
-                          size: 40,
+                  child: file == null
+                      ? DottedBorder(
+                          dashPattern: const [7, 7],
+                          color: kcborderGrey,
+                          strokeWidth: 1,
+                          child: Container(
+                            height: 136.w,
+                            width: 220.w,
+                            decoration: BoxDecoration(
+                              color: kcImageContainer,
+                              borderRadius: borderRadiuscR(r: 4),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.add_a_photo,
+                                color: kcgrey,
+                                size: 40,
+                              ),
+                            ),
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: borderRadiuscR(r: 4),
+                          child: SizedBox(
+                            height: 136.w,
+                            width: 220.w,
+                            child: Image.file(file! // File(filePath!),
+                                ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ),
                 Align(
                   alignment: Alignment.center,
@@ -103,7 +124,26 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     height: 26,
                     color: kcPrimary,
                     shape: cornerR(r: 4),
-                    onPressed: () {},
+                    onPressed: () async {
+                      final results = await FilePicker.platform.pickFiles(
+                        allowMultiple: false,
+                        type: FileType.image,
+                      );
+                      print(results);
+                      if (results != null) {
+                        final path = results.files.single.path!;
+                        final img.Image? image =
+                            img.decodeImage(await File(path).readAsBytes());
+                        img.Image fixedImage;
+                        fixedImage = img.copyRotate(image!, -90);
+                        File newfile = await File(path)
+                            .writeAsBytes(img.encodeJpg(fixedImage));
+                        setState(() {
+                          file = newfile;
+                          fileName = results.files.single.name;
+                        });
+                      }
+                    },
                     child: Text(
                       'Browse file',
                       style: kwtextStyleRD(fs: 14, fw: kfbold, c: kcWhite),
@@ -116,7 +156,36 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   height: 64,
                   color: kcPrimary,
                   shape: cornerR(r: 12),
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (file != null) {
+                        //todo storage
+                        final String? url = await StorageRepo(
+                                uid: widget.rider.documentID)
+                            .uploadRiderDriverLicenseImage(file!, fileName!);
+                        // print(url);
+                        if (url != null) {
+                          Vehicle vehicle = Vehicle(
+                            riderLicense: url,
+                            vehiclePlateNum: plateNumCon.text,
+                          );
+                          await FirestoreRepo(uid: widget.rider.documentID)
+                              .updateRiderVehicleInfo(vehicle);
+                          if (!mounted) return;
+                          Navigator.of(context).pop();
+                        } else {
+                          if (!mounted) return;
+                          kwShowSnackbar(context, 'error upload file');
+                        }
+                      } else {
+                        kwShowSnackbar(context,
+                            'Please fill in all the required information');
+                      }
+                    } else {
+                      kwShowSnackbar(context,
+                          'Please fill in all the required information');
+                    }
+                  },
                   child: Text(
                     'Save',
                     style: kwtextStyleRD(

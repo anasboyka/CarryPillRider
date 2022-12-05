@@ -2,7 +2,9 @@ import 'package:carrypill_rider/constant/constant_string.dart';
 import 'package:carrypill_rider/data/models/all_enum.dart';
 import 'package:carrypill_rider/data/models/clinic.dart';
 import 'package:carrypill_rider/data/models/order_service.dart';
+import 'package:carrypill_rider/data/models/profile.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
+import 'package:carrypill_rider/data/models/vehicle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreRepo {
@@ -38,6 +40,14 @@ class FirestoreRepo {
 
   Future updateRiderInfoOverwrite(Rider rider) async {
     return await riderCollection.doc(uid).set(rider.toMap());
+  }
+
+  Future updateRiderProfileInfo(Profile? profile) async {
+    return await riderCollection.doc(uid).update({'profile': profile?.toMap()});
+  }
+
+  Future updateRiderVehicleInfo(Vehicle? vehicle) async {
+    return await riderCollection.doc(uid).update({'vehicle': vehicle?.toMap()});
   }
 
   Future updateCurrentOrderId(String? orderId) async {
