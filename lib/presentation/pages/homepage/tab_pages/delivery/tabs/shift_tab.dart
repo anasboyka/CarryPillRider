@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ShiftTab extends StatelessWidget {
-  Rider rider;
-  ShiftTab({
+  final Rider rider;
+  const ShiftTab({
     required this.rider,
     Key? key,
   }) : super(key: key);
@@ -42,7 +42,7 @@ class ShiftTab extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Aug 1 - 15, 2022',
+                    'Total Earning', //'Aug 1 - 15, 2022',
                     style: kwtextStyleRD(
                       fs: 16,
                       fw: FontWeight.w500,

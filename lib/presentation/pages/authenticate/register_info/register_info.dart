@@ -1,5 +1,6 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -163,17 +164,34 @@ class _RegisterInfoState extends State<RegisterInfo> {
               child: MaterialButton(
                 minWidth: double.infinity,
                 height: 64,
-                color: kcPrimary,
+                highlightColor: (rider.profile != null && rider.vehicle != null)
+                    ? null
+                    : Colors.transparent,
+                splashColor: (rider.profile != null && rider.vehicle != null)
+                    ? null
+                    : Colors.transparent,
+                color: (rider.profile != null && rider.vehicle != null)
+                    ? kcPrimary
+                    : kcdisabledBtn,
+                highlightElevation: 0,
+                elevation:
+                    (rider.profile != null && rider.vehicle != null) ? 2 : 0,
                 shape: cornerR(r: 12),
-                onPressed: () {
-                  //todo complete sign up
-                },
+                onPressed: (rider.profile != null && rider.vehicle != null)
+                    ? () async {
+                        await FirestoreRepo(uid: rider.documentID!)
+                            .updateRiderProfileComplete(true);
+                        //todo complete sign up
+                      }
+                    : () {},
                 child: Text(
-                  'Save',
+                  'Complete Sign Up',
                   style: kwtextStyleRD(
                     fs: 20,
                     fw: kfbold,
-                    c: kcWhite,
+                    c: (rider.profile != null && rider.vehicle != null)
+                        ? kcWhite
+                        : kcgrey,
                   ),
                 ),
               ),

@@ -33,6 +33,7 @@ class Rider {
   // final String? licenseImageUrl;
   // final String? vehiclePlateNum;
   // final String? vehicleRoadTaxImageUrl;
+  final double earning;
   final DocumentSnapshot? snapshot;
   final DocumentReference? reference;
   final String? documentID;
@@ -70,6 +71,7 @@ class Rider {
     // this.vehiclePlateNum,
     // this.vehicle
     // vehicleRoadTaxImageUrl
+    this.earning = 0,
     this.snapshot,
     this.reference,
     this.documentID,
@@ -93,6 +95,8 @@ class Rider {
           map['orderCancelId'] != null ? List.from(map['orderCancelId']) : null,
       profile: map['profile'] != null ? Profile.fromMap(map['profile']) : null,
       vehicle: map['vehicle'] != null ? Vehicle.fromMap(map['vehicle']) : null,
+      // earning: map['earning'].toDouble(),
+      earning: map['earning'] != null ? map['earning'].toDouble() : null,
       snapshot: snapshot,
       reference: snapshot.reference,
       documentID: snapshot.id,
@@ -126,6 +130,7 @@ class Rider {
         'orderCancelId': orderCancelId,
         'profile': profile != null ? profile!.toMap() : null,
         'vehicle': vehicle != null ? vehicle!.toMap() : null,
+        'earning': earning,
       };
 
   @override

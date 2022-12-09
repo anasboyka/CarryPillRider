@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Vehicle {
   final String? vehiclePlateNum;
   final String? riderLicense;
+  final String? vehicleBrand;
   final DocumentSnapshot? snapshot;
   final DocumentReference? reference;
   final String? documentID;
@@ -10,6 +11,7 @@ class Vehicle {
   Vehicle({
     this.vehiclePlateNum,
     this.riderLicense,
+    this.vehicleBrand,
     this.snapshot,
     this.reference,
     this.documentID,
@@ -21,6 +23,7 @@ class Vehicle {
     return Vehicle(
       vehiclePlateNum: map['vehiclePlateNum'],
       riderLicense: map['riderLicense'],
+      vehicleBrand: map['vehicleBrand'],
       snapshot: snapshot,
       reference: snapshot.reference,
       documentID: snapshot.id,
@@ -31,17 +34,19 @@ class Vehicle {
     return Vehicle(
       vehiclePlateNum: map['vehiclePlateNum'],
       riderLicense: map['riderLicense'],
+      vehicleBrand: map['vehicleBrand'],
     );
   }
 
   Map<String, dynamic> toMap() => {
         'vehiclePlateNum': vehiclePlateNum,
         'riderLicense': riderLicense,
+        'vehicleBrand': vehicleBrand,
       };
 
   @override
   String toString() {
-    return '${vehiclePlateNum.toString()}, ${riderLicense.toString()}, ';
+    return '${vehiclePlateNum.toString()}, ${riderLicense.toString()}, ${vehicleBrand.toString()}, ';
   }
 
   @override

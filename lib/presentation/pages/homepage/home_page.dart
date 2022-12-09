@@ -5,7 +5,8 @@ import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/d
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/delivery_wrapper.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/history_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/map_tab.dart';
-import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile_tab.dart';
+import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile/profile_tab.dart';
+import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile/profile_update.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,9 @@ class _HomePageState extends State<HomePage> {
           DeliveryWrapper(),
           MapTab(),
           HistoryTab(),
+          // ProfileUpdate(
+          //   rider: rider!,
+          // ),
           ProfileTab(),
         ],
       ),

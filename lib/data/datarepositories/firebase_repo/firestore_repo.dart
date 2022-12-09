@@ -50,6 +50,10 @@ class FirestoreRepo {
     return await riderCollection.doc(uid).update({'vehicle': vehicle?.toMap()});
   }
 
+  Future updateRiderProfileComplete(bool status) async {
+    return await riderCollection.doc(uid).update({'isProfileComplete': status});
+  }
+
   Future updateCurrentOrderId(String? orderId) async {
     return await riderCollection.doc(uid).update({'currentOrderId': orderId});
   }

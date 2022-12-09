@@ -81,7 +81,7 @@ class _SignUpState extends State<SignUp> {
                               iconSize: 35,
                               onPressed: () async {
                                 AuthRepo().signInWithEmailAndPassword(
-                                    'testfirst@gmail.com', '123456');
+                                    'testrider9@gmail.com', '123456');
                                 // BlocProvider.of<AuthCubit>(context)
                                 //     .loadingStart();
                                 //Navigator.of(context).pop();

@@ -167,7 +167,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                         if (url != null) {
                           Vehicle vehicle = Vehicle(
                             riderLicense: url,
-                            vehiclePlateNum: plateNumCon.text,
+                            vehiclePlateNum: plateNumCon.text.toUpperCase(),
                           );
                           await FirestoreRepo(uid: widget.rider.documentID)
                               .updateRiderVehicleInfo(vehicle);

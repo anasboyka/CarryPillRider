@@ -48,10 +48,7 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
               if (streamSubscription == null) {
                 streamCheckOrderAvailable(rider.documentID!);
               }
-              // startStream(riderAuthstate.uid);
-              // print(orderService);
               print(streamSubscription == null);
-              print('herrrrrrrr');
             } else {
               streamSubscription
                   ?.cancel()
