@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/models/profile.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +31,9 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
 
   late DateTime _dateBirth;
 
+  final _formKey = GlobalKey<FormState>();
+  File? file;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +41,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     lnamecon = TextEditingController(text: widget.rider!.lastName);
     phoneNumcon = TextEditingController(text: widget.rider!.phoneNum);
     dateBirthcon = TextEditingController(
-        text: DateFormat('dd MMMM, yyyy')
+        text: DateFormat('d MMMM, yyyy')
             .format(widget.rider!.profile!.birthDate!));
     _dateBirth = widget.rider!.profile!.birthDate!;
     super.initState();
@@ -65,22 +72,37 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 width: 120,
                 child: Stack(
                   children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            offset: Offset(0.0, 1.0), //(x,y)
-                            blurRadius: 2.0,
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(
-                        'assets/images/profile.png',
-                        height: 115,
-                      ),
-                    ),
+                    CircleAvatar(
+                        radius: 57.r,
+                        backgroundImage: widget
+                                        .rider!.profile!.profileImageUrl !=
+                                    null &&
+                                file == null
+                            ? NetworkImage(
+                                widget.rider!.profile!.profileImageUrl!)
+                            : file != null
+                                ? FileImage(file!)
+                                : const AssetImage('assets/images/profile.png')
+                                    as ImageProvider),
+                    // Container(
+                    //   decoration: const BoxDecoration(
+                    //     shape: BoxShape.circle,
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: Colors.grey,
+                    //         offset: Offset(0.0, 1.0), //(x,y)
+                    //         blurRadius: 2.0,
+                    //       ),
+                    //     ],
+                    //   ),
+                    //   child: file == null
+                    //       ? Image.network(
+                    //           widget.rider!.profile!.profileImageUrl!)
+                    //       : Image.asset(
+                    //           'assets/images/profile.png',
+                    //           height: 115,
+                    //         ),
+                    // ),
                     Positioned(
                       bottom: 10,
                       right: 0,
@@ -89,7 +111,9 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                         color: Colors.transparent,
                         elevation: 0,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            //todo edit picture
+                          },
                           borderRadius: BorderRadius.circular(50),
                           splashColor: Colors.grey.shade300.withOpacity(0.8),
                           highlightColor: Colors.grey.shade800.withOpacity(0.2),
@@ -118,34 +142,68 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   ],
                 ),
               ),
-              gaphr(),
-              cardTextFieldDesign(
-                fnamecon,
-                'First Name',
-                nodefname,
-                0,
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    gaphr(),
+                    cardTextFieldDesign(
+                      fnamecon,
+                      'First Name',
+                      nodefname,
+                      0,
+                    ),
+                    gaphr(),
+                    cardTextFieldDesign(
+                      lnamecon,
+                      "Last Name",
+                      nodelname,
+                      1,
+                    ),
+                    gaphr(),
+                    cardTextFieldDesign(
+                      phoneNumcon,
+                      "Phone Number",
+                      nodephoneNum,
+                      2,
+                    ),
+                    gaphr(),
+                    cardTextFieldDesign(
+                      dateBirthcon,
+                      "Date of Birth",
+                      nodedateBirth,
+                      3,
+                      date: true,
+                    ),
+                  ],
+                ),
               ),
-              gaphr(),
-              cardTextFieldDesign(
-                lnamecon,
-                "Last Name",
-                nodelname,
-                1,
-              ),
-              gaphr(),
-              cardTextFieldDesign(
-                phoneNumcon,
-                "Phone Number",
-                nodephoneNum,
-                2,
-              ),
-              gaphr(),
-              cardTextFieldDesign(
-                dateBirthcon,
-                "Date of Birth",
-                nodedateBirth,
-                3,
-                date: true,
+              gaphr(h: 40),
+              MaterialButton(
+                elevation: 0,
+                height: 64.h,
+                minWidth: double.infinity,
+                color: kcPrimary,
+                shape: cornerR(r: 12),
+                child: Text(
+                  'Update profile',
+                  style: kwtextStyleRD(
+                    c: kcWhite,
+                    fs: 20,
+                    fw: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    Profile profile = Profile(
+                      birthDate: _dateBirth,
+                      // TODO upload image
+                      // profileImageUrl:
+                    );
+                    await FirestoreRepo(uid: widget.rider!.documentID)
+                        .updateRiderProfileInfo(profile);
+                  }
+                },
               ),
             ],
           ),
@@ -174,6 +232,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
           children: [
             Expanded(
               child: TextFormField(
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Field cannot be empty";
+                  }
+                },
                 focusNode: node,
                 style: enabled[index] ? kwstyleb16 : kwstyleHint16,
                 controller: controller,
@@ -192,8 +255,12 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                     fs: 16,
                     fw: FontWeight.w500,
                   ),
-                  // hintText: hintText,
-                  // hintStyle: kwstyleHint16,
+                  errorStyle: const TextStyle(color: kcRedRequired),
+                  errorBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: kcRedRequired,
+                    ),
+                  ),
                 ),
               ),
             ),

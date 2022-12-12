@@ -1,9 +1,20 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/models/order_service.dart';
+import 'package:carrypill_rider/data/models/patient.dart';
+import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:flutter/material.dart';
 
 class OrderTab extends StatefulWidget {
-  const OrderTab({Key? key}) : super(key: key);
+  final OrderService orderService;
+  final Rider rider;
+  final Patient patient;
+  const OrderTab(
+      {Key? key,
+      required this.orderService,
+      required this.patient,
+      required this.rider})
+      : super(key: key);
 
   @override
   State<OrderTab> createState() => _OrderTabState();
@@ -12,6 +23,8 @@ class OrderTab extends StatefulWidget {
 class _OrderTabState extends State<OrderTab> {
   @override
   Widget build(BuildContext context) {
+    OrderService orderService = widget.orderService;
+    Patient patient = widget.patient;
     return Container(
         height: double.infinity,
         width: double.infinity,
@@ -45,7 +58,8 @@ class _OrderTabState extends State<OrderTab> {
                       ),
                       gaphr(h: 5),
                       Text(
-                        'Hospital Sultan Abdul Halim',
+                        orderService.facility!
+                            .facilityName, //'Hospital Sultan Abdul Halim',
                         style: kwtextStyleRD(
                           fs: 20,
                           fw: FontWeight.bold,
@@ -119,7 +133,8 @@ class _OrderTabState extends State<OrderTab> {
                                     ),
                                     gaphr(h: 5),
                                     Text(
-                                      'Iqbal Fakhri Bin Iylia Shuhaimi',
+                                      patient
+                                          .name, //'Iqbal Fakhri Bin Iylia Shuhaimi',
                                       style: kwtextStyleRD(
                                         c: kcPrimary,
                                         fs: 20,
@@ -179,7 +194,7 @@ class _OrderTabState extends State<OrderTab> {
                               ),
                               gaphr(h: 5),
                               Text(
-                                '001234-02-1234',
+                                patient.icNum, //'001234-02-1234',
                                 style: kwtextStyleRD(
                                   c: kcPrimary,
                                   fs: 20,
@@ -211,7 +226,7 @@ class _OrderTabState extends State<OrderTab> {
                               ),
                               gaphr(h: 5),
                               Text(
-                                'SP00695962',
+                                patient.patientId!, //'SP00695962',
                                 style: kwtextStyleRD(
                                   c: kcPrimary,
                                   fs: 20,
@@ -248,7 +263,8 @@ class _OrderTabState extends State<OrderTab> {
                                     ),
                                     gaphr(h: 5),
                                     Text(
-                                      'MAXIM CITY LIGHTS Building, JALAN SENTUL PASAR Section TAMAN PELANGI, 51100 KUALA LUMPUR WILAYAH PERSEKUTUAN',
+                                      patient
+                                          .address!, //'MAXIM CITY LIGHTS Building, JALAN SENTUL PASAR Section TAMAN PELANGI, 51100 KUALA LUMPUR WILAYAH PERSEKUTUAN',
                                       style: kwtextStyleRD(
                                         c: kcPrimary,
                                         fs: 12,
@@ -260,7 +276,9 @@ class _OrderTabState extends State<OrderTab> {
                                 ),
                               ),
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    //TODO display map kalau sempat
+                                  },
                                   icon: const Icon(
                                     Icons.location_pin,
                                     color: kcPrimary,
@@ -289,7 +307,8 @@ class _OrderTabState extends State<OrderTab> {
                               ),
                               gaphr(h: 5),
                               Text(
-                                'Online banking',
+                                orderService.paymentMethod?.name ??
+                                    '', //'Online banking',
                                 style: kwtextStyleRD(
                                   c: kcPrimary,
                                   fs: 20,

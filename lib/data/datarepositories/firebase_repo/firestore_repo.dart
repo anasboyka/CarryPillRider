@@ -2,6 +2,7 @@ import 'package:carrypill_rider/constant/constant_string.dart';
 import 'package:carrypill_rider/data/models/all_enum.dart';
 import 'package:carrypill_rider/data/models/clinic.dart';
 import 'package:carrypill_rider/data/models/order_service.dart';
+import 'package:carrypill_rider/data/models/patient.dart';
 import 'package:carrypill_rider/data/models/profile.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:carrypill_rider/data/models/vehicle.dart';
@@ -26,6 +27,13 @@ class FirestoreRepo {
       FirebaseFirestore.instance.collection('riders');
 
   FirestoreRepo({this.uid});
+
+  Future<Patient> getPatientFuture(String patientRef) async {
+    return await patientCollection
+        .doc(patientRef)
+        .get()
+        .then((value) => Patient.fromFirestore(value));
+  }
 
   Stream<Rider?> get rider {
     return riderCollection
@@ -261,7 +269,7 @@ class FirestoreRepo {
 
   Stream<List<OrderService>> streamListOrder({bool descending = true}) {
     return orderCollection
-        .where('patientRef', isEqualTo: uid)
+        .where('riderRef', isEqualTo: uid)
         .orderBy('orderDate', descending: descending)
         .snapshots()
         .map(_orderListFromSnapshot);

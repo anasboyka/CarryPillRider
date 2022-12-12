@@ -1,10 +1,14 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/models/order_service.dart';
+import 'package:carrypill_rider/data/models/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrderRequest extends StatefulWidget {
-  const OrderRequest({Key? key}) : super(key: key);
+  final OrderService orderService;
+  const OrderRequest({Key? key, required this.orderService}) : super(key: key);
 
   @override
   State<OrderRequest> createState() => _OrderRequestState();
@@ -83,20 +87,33 @@ class _OrderRequestState extends State<OrderRequest> {
                     "Pickup",
                     3.423,
                     6,
-                    'Hospital Sultan Abdul Halim',
-                    'Jalan Lencongan Timur, Bandar Aman Jaya, 08000 Sungai Petani, Kedah',
+                    widget.orderService.facility!.facilityName,
+                    //'Hospital Sultan Abdul Halim',
+                    widget.orderService.facility!.fullAddress,
+                    //'Jalan Lencongan Timur, Bandar Aman Jaya, 08000 Sungai Petani, Kedah',
                     true,
                   ),
                   gaphr(h: 4),
-                  deliveryDetailDesign(
-                    const Icon(Icons.pin_drop),
-                    "Drop-off",
-                    5.87,
-                    12,
-                    "Iqbal Fakhri Bin Iylia",
-                    "Jalan Lencongan Timur, Bandar Aman Jaya, 08000 Sungai Petani, Kedah",
-                    false,
-                  ),
+                  FutureBuilder(
+                      future: FirestoreRepo()
+                          .getPatientFuture(widget.orderService.patientRef!),
+                      builder: (_, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          Patient patient = snapshot.data;
+                          return deliveryDetailDesign(
+                            const Icon(Icons.pin_drop),
+                            "Drop-off",
+                            5.87,
+                            12,
+                            patient.name, //"Iqbal Fakhri Bin Iylia",
+                            patient
+                                .address!, //"Jalan Lencongan Timur, Bandar Aman Jaya, 08000 Sungai Petani, Kedah",
+                            false,
+                          );
+                        } else {
+                          return CircularProgressIndicator.adaptive();
+                        }
+                      }),
                 ],
               ),
             ),
@@ -112,11 +129,12 @@ class _OrderRequestState extends State<OrderRequest> {
                   value: 1,
                 ),
                 gaphr(h: 10),
-                Text('$durationToAccept seconds to auto-decline',
-                    style: kwtextStyleRD(
-                      c: kcRequestPickupDescrp,
-                      fs: 16,
-                    )),
+                //TODO auto decline kalau sempat
+                // Text('$durationToAccept seconds to auto-decline',
+                //     style: kwtextStyleRD(
+                //       c: kcRequestPickupDescrp,
+                //       fs: 16,
+                //     )),
                 gaphr(),
                 Padding(
                   padding: padSymR(),
@@ -132,7 +150,8 @@ class _OrderRequestState extends State<OrderRequest> {
                             ),
                             gaph(h: 7),
                             Text(
-                              'RM 12.00',
+                              'RM ${widget.orderService.totalPay.toStringAsFixed(2)}',
+                              //'RM 12.00',
                               style: kwtextStyleRD(
                                 c: kcProfit,
                                 fs: 30,
@@ -202,10 +221,11 @@ class _OrderRequestState extends State<OrderRequest> {
                       title, //'Pickup',
                       style: kwtextStyleRD(fs: 16, fw: FontWeight.bold),
                     ),
-                    Text(
-                      '${distance.toStringAsFixed(1)}km ~ ${duration}min',
-                      style: kwtextStyleRD(fs: 16, fw: FontWeight.bold),
-                    ),
+                    //TODO distance duration kalau sempat
+                    // Text(
+                    //   '${distance.toStringAsFixed(1)}km ~ ${duration}min',
+                    //   style: kwtextStyleRD(fs: 16, fw: FontWeight.bold),
+                    // ),
                   ],
                 ),
                 gaphr(),

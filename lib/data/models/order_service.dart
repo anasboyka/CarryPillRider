@@ -24,6 +24,7 @@ class OrderService {
 
   OrderService({
     //required this.clinicList,
+    this.facility,
     this.statusOrder = StatusOrder.noOrder,
     this.serviceType,
     this.paymentMethod,
@@ -47,6 +48,8 @@ class OrderService {
     return OrderService(
       // clinicList:
       //     map['clinicList'] != null ? List<Clinic>.from(map['clinicList']) : [],
+      facility:
+          map['facility'] != null ? Facility.fromMap(map['facility']) : null,
       statusOrder: map['statusOrder'] != null
           ? StatusOrder.values.byName(map['statusOrder'])
           : StatusOrder.noOrder,
@@ -79,6 +82,8 @@ class OrderService {
       //         .map<Clinic>((mapString) => Clinic.fromMap(mapString))
       //         .toList()
       //     : [],
+      facility:
+          map['facility'] != null ? Facility.fromMap(map['facility']) : null,
       statusOrder: map['statusOrder'] != null
           ? StatusOrder.values.byName(map['statusOrder'])
           : StatusOrder.noOrder,
@@ -100,6 +105,7 @@ class OrderService {
 
   Map<String, dynamic> toMap() => {
         // 'clinicList': clinicList.map((e) => e.toMap()).toList(),
+        'facility': facility != null ? facility!.toMap() : null,
         'statusOrder': statusOrder.name,
         'serviceType': serviceType?.name,
         'paymentMethod': paymentMethod?.name,

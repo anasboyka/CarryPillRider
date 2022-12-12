@@ -56,6 +56,8 @@ class _ProfileTabState extends State<ProfileTab> {
                           splashRadius: 20,
                           onPressed: () {
                             //TODO navigation tu profile update
+                            Navigator.of(context)
+                                .pushNamed('/profileupdate', arguments: rider);
                           },
                           icon: const Icon(
                             Icons.edit_outlined,
@@ -69,14 +71,6 @@ class _ProfileTabState extends State<ProfileTab> {
                           ? NetworkImage(rider.profile!.profileImageUrl!)
                           : const AssetImage('assets/images/profile.png')
                               as ImageProvider),
-                  // Container(
-                  //   width: 115.w,
-                  //   height: 115.w,
-                  //   decoration: const BoxDecoration(shape: BoxShape.circle),
-                  //   child: rider!.profile!.profileImageUrl != null
-                  //       ? Image.network(rider.profile!.profileImageUrl!)
-                  //       : Image.asset('assets/images/profile.png'),
-                  // ),
                   gaphr(h: 15),
                   Text(
                     "${rider.firstName} ${rider.lastName}", //'Mohamed Salah',
@@ -199,7 +193,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                     fw: kfmedium,
                                   ),
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 Text(
                                   '13',
                                   style: kwtextStyleRD(
@@ -242,11 +236,20 @@ class _ProfileTabState extends State<ProfileTab> {
               ),
             ),
             gaphr(),
-            dataTile('Phone', '0123456789'),
+            dataTile(
+              'Phone',
+              rider.phoneNum,
+            ),
             gaphr(),
-            dataTile('Gender', 'Male'),
+            dataTile(
+                'Gender',
+                //'Male',
+                rider.profile!.gender!),
             gaphr(),
-            dataTile('Birth date', '6 Dec, 1992'),
+            dataTile(
+                'Birth date',
+                //'6 Dec, 1992',
+                dateformatText(rider.profile!.birthDate!)),
             gaphr(),
           ],
         ),
@@ -277,7 +280,7 @@ class _ProfileTabState extends State<ProfileTab> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Phone',
+                  title, //'Phone',
                   style: kwtextStyleRD(
                     c: kchintTextfield,
                     fs: 14,

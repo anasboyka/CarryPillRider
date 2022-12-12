@@ -9,7 +9,7 @@ import 'package:carrypill_rider/presentation/pages/authenticate/sign_in.dart';
 import 'package:carrypill_rider/presentation/pages/authenticate/sign_up.dart';
 import 'package:carrypill_rider/presentation/pages/authenticate/startup.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/home_page.dart';
-import 'package:carrypill_rider/presentation/pages/homepage/order_request.dart';
+import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/order_request.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/delivery_order_accepted.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

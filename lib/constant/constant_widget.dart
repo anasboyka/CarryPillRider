@@ -1,6 +1,7 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 const kwstyleb12 = TextStyle(
   fontSize: 12,
@@ -177,6 +178,31 @@ Future kwShowSnackbar(BuildContext context, String message,
 
 SizedBox gaph({double h = 20}) {
   return SizedBox(height: h);
+}
+
+//String
+String dateformat(DateTime date, {String format = 'dd-MM-yyyy'}) {
+  return DateFormat(format).format(date);
+}
+
+String dateformatText(DateTime date) {
+  return DateFormat('d MMMM, yyyy').format(date);
+}
+
+String dateformatNumSlashI(DateTime date) {
+  return DateFormat('dd/mmmm/yyyy').format(date);
+}
+
+String dateformatNumSlashD(DateTime date) {
+  return DateFormat('yy/mmmm/dddd').format(date);
+}
+
+String dateformatNumDashI(DateTime date) {
+  return DateFormat('dd-mmmm-yyyy').format(date);
+}
+
+String dateformatNumDashD(DateTime date) {
+  return DateFormat('yy-mmmm-dddd').format(date);
 }
 
 //Text

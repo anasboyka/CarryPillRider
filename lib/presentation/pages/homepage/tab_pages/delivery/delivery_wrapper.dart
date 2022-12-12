@@ -176,7 +176,9 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
 
   Future<bool> handleOrder(String riderId, OrderService order) async {
     print('push');
-    Navigator.of(context).pushNamed('/orderrequest').then((value) async {
+    Navigator.of(context)
+        .pushNamed('/orderrequest', arguments: order)
+        .then((value) async {
       if (value == true) {
         streamSubscription?.cancel().then((_) => streamSubscription = null);
         await FirestoreRepo(uid: riderId)

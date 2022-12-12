@@ -28,7 +28,7 @@ class Profile {
 
     return Profile(
       profileImageUrl: map['profileImageUrl'],
-      birthDate: map['birthDate'],
+      birthDate: map['birthDate']?.toDate(),
       gender: map['gender'],
       icNum: map['icNum'],
       address: map['address'],
