@@ -18,6 +18,7 @@ class OrderService {
   String? riderRef;
   List<String>? riderCancelId;
   bool? riderPending;
+  int? tokenNum;
   DocumentSnapshot? snapshot;
   DocumentReference? reference;
   String? documentID;
@@ -36,6 +37,7 @@ class OrderService {
     this.riderRef,
     this.riderCancelId,
     this.riderPending,
+    this.tokenNum,
     this.snapshot,
     this.reference,
     this.documentID,
@@ -69,6 +71,7 @@ class OrderService {
           map['riderCancelId'] != null ? List.from(map['riderCancelId']) : null,
       riderPending: map['riderPending'],
       // appointment: map['appointment']?.toDate(),
+      tokenNum: map['tokenNum'],
       snapshot: snapshot,
       reference: snapshot.reference,
       documentID: snapshot.id,
@@ -100,6 +103,7 @@ class OrderService {
       // appointment: map['appointment']?.toDate(),
       riderCancelId:
           map['riderCancelId'] != null ? List.from(map['riderCancelId']) : null,
+      tokenNum: map['tokenNum'],
     );
   }
 
@@ -116,6 +120,7 @@ class OrderService {
         'riderCancelId': riderCancelId,
         'riderPending': riderPending,
         // 'appointment': appointment,
+        'tokenNum': tokenNum,
       };
 
   // OrderService copyWith({
