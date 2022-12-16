@@ -4,7 +4,7 @@ import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/delivery_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/delivery_wrapper.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/history/history_tab.dart';
-import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/map_tab.dart';
+import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/map/map_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile/profile_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile/profile_update.dart';
 import 'package:flutter/material.dart';

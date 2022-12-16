@@ -30,22 +30,21 @@ dependencies:
   animations: ^2.0.7
   badges: ^2.0.3
   bloc_test: any
-  # cloud_firestore: ^3.2.1
   cloud_firestore: ^4.1.0
   cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0+3
   dropdown_button2: ^1.7.2
   equatable: ^2.0.3
   file_picker: ^4.6.1
-  # firebase_auth: ^3.4.1
   firebase_auth: ^4.1.5
-  # firebase_core: ^1.19.1
   firebase_core: ^2.3.0
   firebase_storage: ^11.0.6
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_screenutil: ^5.5.3+2
+  google_maps_flutter: ^2.2.2
+  image: ^3.2.2
   intl: ^0.17.0
   json_annotation: ^4.6.0
   lottie: ^1.4.2
@@ -55,7 +54,6 @@ dependencies:
   test: any
   timelines: ^0.1.0
   url_launcher: ^6.1.4
-  image: ^3.2.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0
