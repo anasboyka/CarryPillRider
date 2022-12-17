@@ -33,7 +33,7 @@ class Rider {
   // final String? licenseImageUrl;
   // final String? vehiclePlateNum;
   // final String? vehicleRoadTaxImageUrl;
-  final double earning;
+  final double? earning;
   final DocumentSnapshot? snapshot;
   final DocumentReference? reference;
   final String? documentID;
@@ -96,7 +96,7 @@ class Rider {
       profile: map['profile'] != null ? Profile.fromMap(map['profile']) : null,
       vehicle: map['vehicle'] != null ? Vehicle.fromMap(map['vehicle']) : null,
       // earning: map['earning'].toDouble(),
-      earning: map['earning'] != null ? map['earning'].toDouble() : null,
+      earning: map['earning']?.toDouble(),
       snapshot: snapshot,
       reference: snapshot.reference,
       documentID: snapshot.id,
@@ -135,7 +135,7 @@ class Rider {
 
   @override
   String toString() {
-    return '${firstName.toString()}, ${lastName.toString()}, ${phoneNum.toString()}, ${vehicleType.toString()}, ${workingStatus.toString()}, ${isWorking.toString()}, ${currrentLocation.toString()}, ';
+    return '${firstName.toString()}, ${lastName.toString()}, ${phoneNum.toString()}, ${vehicleType.toString()}, ${workingStatus.toString()}, ${isWorking.toString()}, ${currrentLocation.toString()}, ${earning.toString()},';
   }
 
   @override

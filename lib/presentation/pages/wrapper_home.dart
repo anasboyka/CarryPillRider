@@ -35,7 +35,9 @@ class WrapperHome extends StatelessWidget {
               if (isProfileComplete) {
                 return StreamProvider<Rider?>.value(
                   initialData: rider,
+                  // create: (_) => FirestoreRepo(uid: riderAuthstate.uid).rider,
                   value: FirestoreRepo(uid: riderAuthstate.uid).rider,
+                  updateShouldNotify: (_, __) => true,
                   child: HomePage(),
                 );
               } else {
@@ -43,6 +45,7 @@ class WrapperHome extends StatelessWidget {
                 return StreamProvider<Rider?>.value(
                   initialData: rider,
                   value: FirestoreRepo(uid: riderAuthstate.uid).rider,
+                  updateShouldNotify: (_, __) => true,
                   child: RegisterInfo(),
                 );
                 //return ProfileInfo();

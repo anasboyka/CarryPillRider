@@ -30,14 +30,14 @@ dependencies:
   animations: ^2.0.7
   badges: ^2.0.3
   bloc_test: any
-  cloud_firestore: ^4.1.0
+  cloud_firestore: ^4.2.0
   cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0+3
   dropdown_button2: ^1.7.2
   equatable: ^2.0.3
   file_picker: ^4.6.1
-  firebase_auth: ^4.1.5
-  firebase_core: ^2.3.0
+  firebase_auth: ^4.2.1
+  firebase_core: ^2.4.0
   firebase_storage: ^11.0.6
   flutter:
     sdk: flutter

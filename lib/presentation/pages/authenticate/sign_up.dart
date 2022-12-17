@@ -80,8 +80,10 @@ class _SignUpState extends State<SignUp> {
                               padding: EdgeInsets.zero,
                               iconSize: 35,
                               onPressed: () async {
+                                print('sign in');
                                 AuthRepo().signInWithEmailAndPassword(
                                     'testrider9@gmail.com', '123456');
+
                                 // BlocProvider.of<AuthCubit>(context)
                                 //     .loadingStart();
                                 //Navigator.of(context).pop();
