@@ -1,7 +1,9 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/logic/provider/provider_location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class MapTab extends StatefulWidget {
   const MapTab({Key? key}) : super(key: key);
@@ -15,6 +17,9 @@ class _MapTabState extends State<MapTab> {
 
   final LatLng _center = const LatLng(3.2077, 101.6899);
 
+  // static const CameraPosition _defaultLocation =
+  //     CameraPosition(target: LatLng(3.2077, 101.6899), zoom: 20);
+
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -27,6 +32,7 @@ class _MapTabState extends State<MapTab> {
 
   @override
   Widget build(BuildContext context) {
+    final position = Provider.of<ProviderLocation>(context).position!;
     return Scaffold(
       backgroundColor: kcBgHome,
       // appBar: AppBar(
@@ -42,7 +48,7 @@ class _MapTabState extends State<MapTab> {
       body: GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
-          target: _center,
+          target: LatLng(position.latitude, position.longitude),
           zoom: 20.0,
         ),
       ),

@@ -1,10 +1,12 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/models/all_enum.dart';
 import 'package:carrypill_rider/data/models/order_service.dart';
 import 'package:carrypill_rider/data/models/patient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class OrderRequest extends StatefulWidget {
   final OrderService orderService;
@@ -16,6 +18,12 @@ class OrderRequest extends StatefulWidget {
 
 class _OrderRequestState extends State<OrderRequest> {
   int durationToAccept = 16;
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(3.2077, 101.6899);
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +41,10 @@ class _OrderRequestState extends State<OrderRequest> {
               ),
             ),
             gaph(h: 5),
-            const Text(
-              'Delivery',
+            Text(
+              widget.orderService.serviceType == ServiceType.requestDelivery
+                  ? 'Delivery'
+                  : 'Pickup',
               style: kwstyleb14,
             )
           ],
@@ -50,57 +60,78 @@ class _OrderRequestState extends State<OrderRequest> {
               ))
         ],
       ),
-      body: Column(
-        children: [
-          gaphr(h: 30),
-          Padding(
-            padding: padSymR(),
-            child: Container(
-              height: 268.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: borderRadiuscR(r: 14), color: kcborderGrey),
-            ),
-          ),
-          gaphr(h: 22),
-          Padding(
-            padding: padSymR(),
-            child: const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Delivery Details',
-                style: kwstyleb14,
-              ),
-            ),
-          ),
-          gaphr(),
-          Expanded(
-            child: Padding(
-              padding: padSymR(),
-              child: ListView(
-                //shrinkWrap: true,
+      body: FutureBuilder(
+          future:
+              FirestoreRepo().getPatientFuture(widget.orderService.patientRef!),
+          builder: (_, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              Patient patient = snapshot.data;
+              return Column(
                 children: [
-                  deliveryDetailDesign(
-                    const Icon(
-                      Icons.domain,
+                  gaphr(h: 30),
+                  Padding(
+                    padding: padSymR(),
+                    child: Container(
+                      height: 268.h,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: borderRadiuscR(r: 14),
+                        border: Border.all(color: kcborderGrey),
+                        color: kcborderGrey,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: borderRadiuscR(r: 14),
+                        child: GoogleMap(
+                          onMapCreated: _onMapCreated,
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(patient.geoPoint!.latitude,
+                                patient.geoPoint!.longitude),
+                            zoom: 17.0,
+                          ),
+                        ),
+                      ),
                     ),
-                    "Pickup",
-                    3.423,
-                    6,
-                    widget.orderService.facility!.facilityName,
-                    //'Hospital Sultan Abdul Halim',
-                    widget.orderService.facility!.fullAddress,
-                    //'Jalan Lencongan Timur, Bandar Aman Jaya, 08000 Sungai Petani, Kedah',
-                    true,
                   ),
-                  gaphr(h: 4),
-                  FutureBuilder(
-                      future: FirestoreRepo()
-                          .getPatientFuture(widget.orderService.patientRef!),
-                      builder: (_, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          Patient patient = snapshot.data;
-                          return deliveryDetailDesign(
+                  gaphr(h: 22),
+                  Padding(
+                    padding: padSymR(),
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Delivery Details',
+                        style: kwstyleb14,
+                      ),
+                    ),
+                  ),
+                  gaphr(),
+                  Expanded(
+                    child: Padding(
+                      padding: padSymR(),
+                      child: ListView(
+                        //shrinkWrap: true,
+                        children: [
+                          deliveryDetailDesign(
+                            const Icon(
+                              Icons.domain,
+                            ),
+                            "Pickup",
+                            3.423,
+                            6,
+                            widget.orderService.facility!.facilityName,
+                            //'Hospital Sultan Abdul Halim',
+                            widget.orderService.facility!.fullAddress,
+                            //'Jalan Lencongan Timur, Bandar Aman Jaya, 08000 Sungai Petani, Kedah',
+                            true,
+                          ),
+                          gaphr(h: 4),
+                          // FutureBuilder(
+                          //     future: FirestoreRepo()
+                          //         .getPatientFuture(widget.orderService.patientRef!),
+                          //     builder: (_, AsyncSnapshot snapshot) {
+                          //       if (snapshot.hasData) {
+                          //         Patient patient = snapshot.data;
+                          //         return
+                          deliveryDetailDesign(
                             const Icon(Icons.pin_drop),
                             "Drop-off",
                             5.87,
@@ -109,83 +140,83 @@ class _OrderRequestState extends State<OrderRequest> {
                             patient
                                 .address!, //"Jalan Lencongan Timur, Bandar Aman Jaya, 08000 Sungai Petani, Kedah",
                             false,
-                          );
-                        } else {
-                          return CircularProgressIndicator.adaptive();
-                        }
-                      }),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            height: 155,
-            width: double.infinity,
-            child: Column(
-              children: [
-                LinearProgressIndicator(
-                  backgroundColor: kcWhite,
-                  color: kcPrimary,
-                  value: 1,
-                ),
-                gaphr(h: 10),
-                //TODO auto decline kalau sempat
-                // Text('$durationToAccept seconds to auto-decline',
-                //     style: kwtextStyleRD(
-                //       c: kcRequestPickupDescrp,
-                //       fs: 16,
-                //     )),
-                gaphr(),
-                Padding(
-                  padding: padSymR(),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'You will earn',
-                              style: kwstyleb16,
-                            ),
-                            gaph(h: 7),
-                            Text(
-                              'RM ${widget.orderService.totalPay.toStringAsFixed(2)}',
-                              //'RM 12.00',
-                              style: kwtextStyleRD(
-                                c: kcProfit,
-                                fs: 30,
-                                fw: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                          )
+                        ],
                       ),
-                      Expanded(
-                        child: MaterialButton(
-                          shape: cornerR(
-                            r: 8,
-                          ),
-                          minWidth: double.infinity,
-                          height: 64,
-                          color: kcPrimary,
-                          onPressed: () {
-                            Navigator.of(context).pop(true);
-                          },
-                          child: const Text(
-                            'Accept',
-                            style: kwstyleBtn20b,
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
+                  Container(
+                    height: 155,
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        LinearProgressIndicator(
+                          backgroundColor: kcWhite,
+                          color: kcPrimary,
+                          value: 1,
+                        ),
+                        gaphr(h: 10),
+                        //TODO auto decline kalau sempat
+                        // Text('$durationToAccept seconds to auto-decline',
+                        //     style: kwtextStyleRD(
+                        //       c: kcRequestPickupDescrp,
+                        //       fs: 16,
+                        //     )),
+                        gaphr(),
+                        Padding(
+                          padding: padSymR(),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'You will earn',
+                                      style: kwstyleb16,
+                                    ),
+                                    gaph(h: 7),
+                                    Text(
+                                      'RM ${widget.orderService.totalPay.toStringAsFixed(2)}',
+                                      //'RM 12.00',
+                                      style: kwtextStyleRD(
+                                        c: kcProfit,
+                                        fs: 30,
+                                        fw: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: MaterialButton(
+                                  shape: cornerR(
+                                    r: 8,
+                                  ),
+                                  minWidth: double.infinity,
+                                  height: 64,
+                                  color: kcPrimary,
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: const Text(
+                                    'Accept',
+                                    style: kwstyleBtn20b,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return CircularProgressIndicator.adaptive();
+            }
+          }),
     );
   }
 
