@@ -2,6 +2,7 @@ import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 const kwstyleb12 = TextStyle(
   fontSize: 12,
@@ -185,8 +186,24 @@ String dateformat(DateTime date, {String format = 'dd-MM-yyyy'}) {
   return DateFormat(format).format(date);
 }
 
-String dateformatText(DateTime date) {
+String timeformat(DateTime date, {String format = 'h:mm a'}) {
+  return DateFormat(format).format(date);
+}
+
+String dateformatTextLongMonthYear(DateTime date) {
   return DateFormat('d MMMM, yyyy').format(date);
+}
+
+String dateformatTextShortMonthYear(DateTime date) {
+  return DateFormat('d MMM, yyyy').format(date);
+}
+
+String dateformatTextLongMonthDay(DateTime date) {
+  return DateFormat('d MMMM, EEEE').format(date);
+}
+
+String dateformatTextShortMonthDay(DateTime date) {
+  return DateFormat('d MMM, EEEE').format(date);
 }
 
 String dateformatNumSlashI(DateTime date) {
@@ -352,4 +369,23 @@ InputDecoration inputDeco({
       ),
     ),
   );
+}
+
+//loading
+Widget loadingPillr(double size, {bool center = true}) {
+  if (center) {
+    return Center(
+      child: SizedBox(
+        width: size.w,
+        height: size.w,
+        child: Lottie.asset('assets/lottie/pillLoading.json'),
+      ),
+    );
+  } else {
+    return SizedBox(
+      width: size.w,
+      height: size.w,
+      child: Lottie.asset('assets/lottie/pillLoading.json'),
+    );
+  }
 }

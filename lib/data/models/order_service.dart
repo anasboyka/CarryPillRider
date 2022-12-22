@@ -19,6 +19,7 @@ class OrderService {
   List<String>? riderCancelId;
   bool? riderPending;
   int? tokenNum;
+  String? tokenUrlImage;
   DocumentSnapshot? snapshot;
   DocumentReference? reference;
   String? documentID;
@@ -38,6 +39,7 @@ class OrderService {
     this.riderCancelId,
     this.riderPending,
     this.tokenNum,
+    this.tokenUrlImage,
     this.snapshot,
     this.reference,
     this.documentID,
@@ -58,8 +60,8 @@ class OrderService {
       serviceType: map['serviceType'] != null
           ? ServiceType.values.byName(map['serviceType'])
           : null,
-      paymentMethod: map['paymentType'] != null
-          ? PaymentMethod.values.byName(map['paymentType'])
+      paymentMethod: map['paymentMethod'] != null
+          ? PaymentMethod.values.byName(map['paymentMethod'])
           : null,
       totalPay: map['totalPay'],
       orderDate: map['orderDate']?.toDate(),
@@ -72,6 +74,7 @@ class OrderService {
       riderPending: map['riderPending'],
       // appointment: map['appointment']?.toDate(),
       tokenNum: map['tokenNum'],
+      tokenUrlImage: map['tokenUrlImage'],
       snapshot: snapshot,
       reference: snapshot.reference,
       documentID: snapshot.id,
@@ -104,6 +107,7 @@ class OrderService {
       riderCancelId:
           map['riderCancelId'] != null ? List.from(map['riderCancelId']) : null,
       tokenNum: map['tokenNum'],
+      tokenUrlImage: map['tokenUrlImage'],
     );
   }
 
@@ -121,6 +125,7 @@ class OrderService {
         'riderPending': riderPending,
         // 'appointment': appointment,
         'tokenNum': tokenNum,
+        'tokenUrlImage': tokenUrlImage,
       };
 
   // OrderService copyWith({

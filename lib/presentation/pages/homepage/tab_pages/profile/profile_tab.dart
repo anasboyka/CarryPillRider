@@ -25,7 +25,7 @@ class _ProfileTabState extends State<ProfileTab> {
       builder: (_, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           Rider rider = snapshot.data;
-          print(rider);
+          // print(rider);
           return Scaffold(
             backgroundColor: kcBgHome,
             appBar: AppBar(
@@ -264,7 +264,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   dataTile(
                       'Birth date',
                       //'6 Dec, 1992',
-                      dateformatText(rider.profile!.birthDate!)),
+                      dateformatTextLongMonthYear(rider.profile!.birthDate!)),
                   gaphr(),
                 ],
               ),

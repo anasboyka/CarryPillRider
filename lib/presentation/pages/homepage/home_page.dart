@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final rider = Provider.of<Rider?>(context);
-    print(rider?.firstName);
+    // print(rider?.firstName);
     return Scaffold(
       backgroundColor: kcBgHome,
       body: IndexedStack(

@@ -23,6 +23,19 @@ class StorageRepo {
     }
   }
 
+  Future<String?> uploadOrderTokenImage(File file) async {
+    // File file = File(filePath);
+    final ref = storage.ref().child('orders').child('/$uid/');
+
+    try {
+      await ref.child('tokenImage').putFile(file);
+      return await ref.child('tokenImage').getDownloadURL();
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<String?> uploadRiderDriverLicenseImage(
       File file, String fileName) async {
     final ref = storage.ref().child('riders').child('/$uid/');

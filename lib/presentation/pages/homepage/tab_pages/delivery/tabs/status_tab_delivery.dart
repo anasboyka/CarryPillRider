@@ -17,12 +17,12 @@ const completeColor = Color(0xff5e6172);
 const inProgressColor = Color(0xff5ec792);
 const todoColor = Color(0xffd1d2d7);
 
-class StatusTab extends StatefulWidget {
+class StatusTabDelivery extends StatefulWidget {
   OrderService orderService;
   Patient patient;
   Rider rider;
 
-  StatusTab({
+  StatusTabDelivery({
     Key? key,
     required this.orderService,
     required this.patient,
@@ -30,11 +30,11 @@ class StatusTab extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatusTab> createState() => _StatusTabState();
+  State<StatusTabDelivery> createState() => _StatusTabDeliveryState();
 }
 
-class _StatusTabState extends State<StatusTab>
-    with AutomaticKeepAliveClientMixin<StatusTab> {
+class _StatusTabDeliveryState extends State<StatusTabDelivery>
+    with AutomaticKeepAliveClientMixin<StatusTabDelivery> {
   int currentStep = 0;
   final List<Map<String, dynamic>> _processes = [
     {
@@ -158,6 +158,8 @@ class _StatusTabState extends State<StatusTab>
                     DateTime.now(),
                     rider.isWorking,
                   );
+                  await FirestoreRepo(uid: riderAuthstate.uid)
+                      .updateEarning(widget.orderService.totalPay);
                   // await FirestoreRepo().updateStatusOrder(
                   //     StatusOrder.orderArrived, widget.orderService.documentID!);
                   // await FirestoreRepo(uid: widget.orderService.riderRef)
@@ -429,7 +431,7 @@ class _StatusTabState extends State<StatusTab>
                             minimumSize: const Size(104, 30),
                           ),
                           onPressed: () async {
-                            print(_processIndex);
+                            // print(_processIndex);
                             if (_processIndex == 1) {
                               await FirestoreRepo().updateStatusOrder(
                                   StatusOrder.orderPreparing,

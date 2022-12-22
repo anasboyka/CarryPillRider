@@ -114,7 +114,7 @@ class _StartupState extends State<Startup> {
                   onPressed: () {
                     //TODO navigate to sign in
                     Navigator.of(context).pushNamed('/signin');
-                    print('goto signin');
+                    // print('goto signin');
                   },
                 ),
                 gaphr(h: 30),
@@ -128,7 +128,7 @@ class _StartupState extends State<Startup> {
                     InkWell(
                       onTap: () {
                         Navigator.of(context).pushNamed('/signup');
-                        print('goto signup');
+                        // print('goto signup');
                       },
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,

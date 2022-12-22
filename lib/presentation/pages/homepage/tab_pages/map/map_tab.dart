@@ -49,7 +49,7 @@ class _MapTabState extends State<MapTab> {
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 20.0,
+          zoom: 18.0,
         ),
       ),
     );

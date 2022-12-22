@@ -106,6 +106,12 @@ class FirestoreRepo {
     }
   }
 
+  Future updateEarning(double amount) async {
+    return await riderCollection
+        .doc(uid)
+        .update({'earning': FieldValue.increment(amount)});
+  }
+
   // Future addRider(Rider rider) async {
   //   return await riderCollection.add(rider.toMap());
   // }
@@ -163,6 +169,12 @@ class FirestoreRepo {
     });
   }
 
+  Future updateTokenNumber(String tokenUrlImage, String orderId) async {
+    return await orderCollection
+        .doc(orderId)
+        .update({'tokenUrlImage': tokenUrlImage});
+  }
+
   Future updateOrderQueryStatusPendingTransaction(String orderId) async {
     final db = FirebaseFirestore.instance;
     db.runTransaction((transaction) async {
@@ -217,7 +229,7 @@ class FirestoreRepo {
       'workingStatus': 'isWaitingForOrder',
       'currentOrderId': null,
     });
-    print(ordersId[0]);
+    // print(ordersId[0]);
     await orderCollection.doc(ordersId[0]).update({
       'riderPending': false,
     });
@@ -265,6 +277,18 @@ class FirestoreRepo {
         .doc(orderId)
         .get()
         .then((value) => OrderService.fromFirestore(value));
+  }
+
+  Future<OrderService> getLatestOrder() async {
+    return orderCollection
+        .where('riderRef', isEqualTo: uid)
+        .orderBy('orderDateComplete', descending: true)
+        .get()
+        .then(
+      (snapshot) {
+        return OrderService.fromFirestore(snapshot.docs.first);
+      },
+    ).onError((error, stackTrace) => OrderService());
   }
 
   Stream<List<OrderService>> streamListOrder({bool descending = true}) {

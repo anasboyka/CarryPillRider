@@ -1,5 +1,6 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -159,7 +160,19 @@ class _SignInState extends State<SignIn> {
               fw: FontWeight.bold,
             ),
           ),
-          onPressed: () {},
+          onPressed: () async {
+            try {
+              dynamic result = await AuthRepo()
+                  .signInWithEmailAndPassword(emailcon.text, passcon.text);
+              if (!mounted) return;
+              Navigator.of(context).pop();
+              print('sign in');
+              print(result);
+            } on Exception catch (e) {
+              kwShowSnackbar(context, 'error $e');
+              // TODO
+            }
+          },
         ),
         isKeyboardinput ? gaphr(h: 0) : gaphr(h: 130),
       ],

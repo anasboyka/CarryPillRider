@@ -2,13 +2,15 @@ import 'package:animations/animations.dart';
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/models/all_enum.dart';
 import 'package:carrypill_rider/data/models/order_service.dart';
 import 'package:carrypill_rider/data/models/patient.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:carrypill_rider/data/models/rider_uid.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/tabs/order_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/tabs/shift_tab.dart';
-import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/tabs/status_tab.dart';
+import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/tabs/status_tab_delivery.dart';
+import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/tabs/status_tab_pickup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -102,12 +104,23 @@ class _DeliveryOrderAcceptedState extends State<DeliveryOrderAccepted> {
                               rider: rider!,
                               // key: _keys[1],
                             ),
-                            StatusTab(
-                              orderService: orderService,
-                              patient: patient,
-                              rider: rider,
-                              // key: _keys[2],
-                            ),
+                            orderService.serviceType ==
+                                    ServiceType.requestDelivery
+                                ? StatusTabDelivery(
+                                    orderService: orderService,
+                                    patient: patient,
+                                    rider: rider)
+                                : StatusTabPickup(
+                                    orderService: orderService,
+                                    patient: patient,
+                                    rider: rider,
+                                  )
+                            // StatusTabDelivery(
+                            //   orderService: orderService,
+                            //   patient: patient,
+                            //   rider: rider,
+                            //   // key: _keys[2],
+                            // ),
                           ],
                         ),
                       ),

@@ -12,6 +12,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:image/image.dart' as img;
@@ -81,12 +82,12 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           ),
                         )
                       : ClipRRect(
-                          borderRadius: borderRadiuscR(r: 4),
+                          borderRadius: borderRadiuscR(r: 10),
                           child: SizedBox(
                             height: 136.w,
-                            width: 300.w,
+                            width: 136.w,
                             child: Image.file(
-                              File(filePath!),
+                              file!, //File(filePath!),
                             ),
                           ),
                         ),
@@ -99,27 +100,34 @@ class _ProfileInfoState extends State<ProfileInfo> {
                     color: kcPrimary,
                     shape: cornerR(r: 4),
                     onPressed: () async {
+                      // try {
                       final results = await FilePicker.platform.pickFiles(
                         allowMultiple: false,
-                        type: FileType.image,
+                        type: FileType.custom,
+                        allowedExtensions: ['jpg', 'png', 'jpeg'],
+                        // allowCompression: true,
                       );
-                      print(results);
+                      // final results = await ImagePicker()
+                      //     .pickImage(source: ImageSource.gallery);
+
+                      // print(results);
                       if (results != null) {
+                        // final path = results.path;
                         final path = results.files.single.path!;
-                        //File file = File(path);
-                        // Image(image: FileImage(file))
-                        //     .image
-                        //     .resolve(const ImageConfiguration())
-                        //     .addListener(
-                        //   ImageStreamListener(
-                        //     (ImageInfo info, bool syncCall) {
-                        //       int width = info.image.width;
-                        //       int height = info.image.height;
-                        //       print(width);
-                        //       print(height);
-                        //     },
-                        //   ),
-                        // );
+                        File pickedfile = File(path);
+                        Image(image: FileImage(pickedfile))
+                            .image
+                            .resolve(const ImageConfiguration())
+                            .addListener(
+                          ImageStreamListener(
+                            (ImageInfo info, bool syncCall) {
+                              int width = info.image.width;
+                              int height = info.image.height;
+                              print(width);
+                              print(height);
+                            },
+                          ),
+                        );
                         final img.Image? image =
                             img.decodeImage(await File(path).readAsBytes());
                         final img.Image orientedImage =
@@ -130,9 +138,14 @@ class _ProfileInfoState extends State<ProfileInfo> {
                         setState(() {
                           file = newfile;
                           filePath = path;
+                          //fileName = results.name;
                           fileName = results.files.single.name;
                         });
                       }
+                      // } on Exception catch (e) {
+                      //   print(e);
+                      //   // TODO
+                      // }
                     },
                     child: Text(
                       'Browse file',
@@ -152,7 +165,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                         controller: dateOfBirthcon,
                         style: kwtextStyleRD(
                           c: kcPrimary,
-                          fs: 12,
+                          fs: 14,
                           fw: kfsemibold,
                         ),
                         validator: (value) {
@@ -229,7 +242,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                         final String? url =
                             await StorageRepo(uid: widget.rider.documentID)
                                 .uploadRiderProfileImage(filePath!, fileName!);
-                        print(url);
+                        // print(url);
                         if (url != null) {
                           Profile profile = Profile(
                               gender: gender,

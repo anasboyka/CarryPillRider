@@ -53,14 +53,15 @@ class WrapperHome extends StatelessWidget {
               }
             } else {
               // print('here');
-              return Center(
-                child: CircularProgressIndicator.adaptive(),
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
               );
             }
           });
     } else {
-      //todo check is admin
-      return SignUp();
+      return Startup();
     }
   }
 }

@@ -23,6 +23,8 @@ class VehicleInfo extends StatefulWidget {
 
 class _VehicleInfoState extends State<VehicleInfo> {
   final plateNumCon = TextEditingController();
+  final vehicleBrandCon = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   String? fileName;
   File? file;
@@ -55,13 +57,37 @@ class _VehicleInfoState extends State<VehicleInfo> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      titleInput('Vehicle Name'),
+                      gaphr(h: 12),
+                      TextFormField(
+                        controller: vehicleBrandCon,
+                        style: kwtextStyleRD(
+                          c: kcPrimary,
+                          fs: 14,
+                          fw: kfsemibold,
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "field cannot be empty";
+                          }
+                          return null;
+                        },
+                        decoration: inputDeco(
+                          contentPadding: padSymR(),
+                          borderColor: kchintTextfield,
+                          borderEnableColor: kchintTextfield,
+                          fsHint: 14,
+                          fwHint: kfregular,
+                        ),
+                      ),
+                      gaphr(),
                       titleInput('Vehicle Plate Number'),
                       gaphr(h: 12),
                       TextFormField(
                         controller: plateNumCon,
                         style: kwtextStyleRD(
                           c: kcPrimary,
-                          fs: 12,
+                          fs: 14,
                           fw: kfsemibold,
                         ),
                         validator: (value) {
@@ -108,9 +134,9 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           ),
                         )
                       : ClipRRect(
-                          borderRadius: borderRadiuscR(r: 4),
+                          borderRadius: borderRadiuscR(r: 10),
                           child: SizedBox(
-                            height: 136.w,
+                            //height: 136.w,
                             width: 220.w,
                             child: Image.file(file! // File(filePath!),
                                 ),
@@ -126,18 +152,34 @@ class _VehicleInfoState extends State<VehicleInfo> {
                     shape: cornerR(r: 4),
                     onPressed: () async {
                       final results = await FilePicker.platform.pickFiles(
-                        allowMultiple: false,
-                        type: FileType.image,
-                      );
-                      print(results);
+                          allowMultiple: false,
+                          type: FileType.custom,
+                          allowedExtensions: ['png', 'jpg', 'jpeg']);
+                      // print(results);
                       if (results != null) {
                         final path = results.files.single.path!;
+                        print(path);
+                        File pickedfile = File(path);
+                        Image(image: FileImage(pickedfile))
+                            .image
+                            .resolve(const ImageConfiguration())
+                            .addListener(
+                          ImageStreamListener(
+                            (ImageInfo info, bool syncCall) {
+                              int width = info.image.width;
+                              int height = info.image.height;
+                              print(width);
+                              print(height);
+                            },
+                          ),
+                        );
                         final img.Image? image =
                             img.decodeImage(await File(path).readAsBytes());
-                        img.Image fixedImage;
-                        fixedImage = img.copyRotate(image!, -90);
+                        print(image);
+                        final img.Image orientedImage =
+                            img.bakeOrientation(image!);
                         File newfile = await File(path)
-                            .writeAsBytes(img.encodeJpg(fixedImage));
+                            .writeAsBytes(img.encodePng(orientedImage));
                         setState(() {
                           file = newfile;
                           fileName = results.files.single.name;
@@ -168,6 +210,7 @@ class _VehicleInfoState extends State<VehicleInfo> {
                           Vehicle vehicle = Vehicle(
                             riderLicense: url,
                             vehiclePlateNum: plateNumCon.text.toUpperCase(),
+                            vehicleBrand: vehicleBrandCon.text.toUpperCase(),
                           );
                           await FirestoreRepo(uid: widget.rider.documentID)
                               .updateRiderVehicleInfo(vehicle);

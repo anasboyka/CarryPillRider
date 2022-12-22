@@ -101,7 +101,7 @@ class _RegisterInfoState extends State<RegisterInfo> {
                     onTap: () {
                       Navigator.of(context)
                           .pushNamed('/profileinfo', arguments: rider);
-                      print('tap');
+                      // print('tap');
                     },
                     contentPadding: padSymR(),
                   ),

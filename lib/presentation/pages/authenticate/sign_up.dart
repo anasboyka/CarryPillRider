@@ -80,13 +80,13 @@ class _SignUpState extends State<SignUp> {
                               padding: EdgeInsets.zero,
                               iconSize: 35,
                               onPressed: () async {
-                                print('sign in');
-                                AuthRepo().signInWithEmailAndPassword(
-                                    'testrider9@gmail.com', '123456');
+                                // print('sign in');
+                                // AuthRepo().signInWithEmailAndPassword(
+                                //     'alifzakwan@gmail.com', '123456');
 
                                 // BlocProvider.of<AuthCubit>(context)
                                 //     .loadingStart();
-                                //Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               },
                               icon: const Icon(
                                 size: 35,
@@ -326,7 +326,7 @@ class _SignUpState extends State<SignUp> {
                               Rider rider = Rider(
                                 firstName: fnameCon.text,
                                 lastName: lnameCon.text,
-                                phoneNum: phoneNumCon.text,
+                                phoneNum: '+60${phoneNumCon.text}',
                                 vehicleType: vehicleType!,
                                 workingStatus: ksNotWorking,
                                 isWorking: false,
@@ -337,7 +337,8 @@ class _SignUpState extends State<SignUp> {
                                 emailCon.text.trim(),
                                 pass1Con.text,
                               );
-                              print(result);
+
+                              // print(result);
                               // Rider rider = Rider(
                               //   firstName: 'Alif',
                               //   lastName: 'Zakwan',
@@ -359,6 +360,8 @@ class _SignUpState extends State<SignUp> {
                                 if (user != null) {
                                   await FirestoreRepo(uid: result.user!.uid)
                                       .createRider(rider);
+                                  if (!mounted) return;
+                                  Navigator.of(context).pop();
                                   //TODO navigation
                                   // print('pass navigation');
                                 } else {

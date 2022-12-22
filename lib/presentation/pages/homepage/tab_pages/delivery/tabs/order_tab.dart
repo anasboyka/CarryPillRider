@@ -1,5 +1,6 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/models/all_enum.dart';
 import 'package:carrypill_rider/data/models/order_service.dart';
 import 'package:carrypill_rider/data/models/patient.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
@@ -24,6 +25,7 @@ class _OrderTabState extends State<OrderTab> {
   @override
   Widget build(BuildContext context) {
     OrderService orderService = widget.orderService;
+
     Patient patient = widget.patient;
     return Container(
         height: double.infinity,
@@ -113,9 +115,9 @@ class _OrderTabState extends State<OrderTab> {
                         color: Colors.transparent,
                         child: ListTile(
                           contentPadding: padSymR(),
-                          onTap: () {
-                            print('press');
-                          },
+                          // onTap: () {
+                          //   print('press');
+                          // },
                           title: Row(
                             children: [
                               Expanded(
@@ -179,9 +181,9 @@ class _OrderTabState extends State<OrderTab> {
                         color: Colors.transparent,
                         child: ListTile(
                           contentPadding: padSymR(),
-                          onTap: () {
-                            print('press');
-                          },
+                          // onTap: () {
+                          //   print('press');
+                          // },
                           title: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,9 +213,9 @@ class _OrderTabState extends State<OrderTab> {
                         color: Colors.transparent,
                         child: ListTile(
                           contentPadding: padSymR(),
-                          onTap: () {
-                            print('press');
-                          },
+                          // onTap: () {
+                          //   print('press');
+                          // },
                           title: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,9 +245,9 @@ class _OrderTabState extends State<OrderTab> {
                         color: Colors.transparent,
                         child: ListTile(
                           contentPadding: padSymR(),
-                          onTap: () {
-                            print('press');
-                          },
+                          // onTap: () {
+                          //   print('press');
+                          // },
                           title: Row(
                             children: [
                               Expanded(
@@ -292,9 +294,9 @@ class _OrderTabState extends State<OrderTab> {
                         color: Colors.transparent,
                         child: ListTile(
                           contentPadding: padSymR(),
-                          onTap: () {
-                            print('press');
-                          },
+                          // onTap: () {
+                          //   print('press');
+                          // },
                           title: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,8 +309,11 @@ class _OrderTabState extends State<OrderTab> {
                               ),
                               gaphr(h: 5),
                               Text(
-                                orderService.paymentMethod?.name ??
-                                    '', //'Online banking',
+                                orderService.paymentMethod ==
+                                        PaymentMethod.debitcredit
+                                    ? 'debit/credit card'
+                                    : orderService.paymentMethod?.name ??
+                                        'null', //'Online banking',
                                 style: kwtextStyleRD(
                                   c: kcPrimary,
                                   fs: 20,

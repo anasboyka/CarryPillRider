@@ -36,7 +36,7 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
     return StreamBuilder(
       stream: FirestoreRepo(uid: riderAuthstate!.uid).rider,
       builder: (_, AsyncSnapshot snapshot) {
-        print('build');
+        // print('build');
         if (snapshot.hasData) {
           Rider rider = snapshot.data;
           if (rider.workingStatus == 'acceptedOrder') {
@@ -44,11 +44,11 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
           } else {
             //TODO progress
             if (rider.isWorking) {
-              print(streamSubscription == null);
+              // print(streamSubscription == null);
               if (streamSubscription == null) {
                 streamCheckOrderAvailable(rider.documentID!);
               }
-              print(streamSubscription == null);
+              // print(streamSubscription == null);
             } else {
               streamSubscription
                   ?.cancel()
@@ -175,7 +175,7 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
   // }
 
   Future<bool> handleOrder(String riderId, OrderService order) async {
-    print('push');
+    // print('push');
     Navigator.of(context)
         .pushNamed('/orderrequest', arguments: order)
         .then((value) async {

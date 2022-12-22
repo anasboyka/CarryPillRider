@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
@@ -145,8 +147,8 @@ class _OrderRequestState extends State<OrderRequest> {
                       ),
                     ),
                   ),
-                  Container(
-                    height: 155,
+                  SizedBox(
+                    height: Platform.isAndroid ? 100 : 155,
                     width: double.infinity,
                     child: Column(
                       children: [
@@ -155,14 +157,14 @@ class _OrderRequestState extends State<OrderRequest> {
                           color: kcPrimary,
                           value: 1,
                         ),
-                        gaphr(h: 10),
+                        //gaphr(h: 10),
                         //TODO auto decline kalau sempat
                         // Text('$durationToAccept seconds to auto-decline',
                         //     style: kwtextStyleRD(
                         //       c: kcRequestPickupDescrp,
                         //       fs: 16,
                         //     )),
-                        gaphr(),
+                        gaphr(h: Platform.isAndroid ? 15 : 20),
                         Padding(
                           padding: padSymR(),
                           child: Row(
