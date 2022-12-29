@@ -35,10 +35,10 @@ dependencies:
   dotted_border: ^2.0.0+3
   dropdown_button2: ^1.7.2
   equatable: ^2.0.3
-  file_picker: any #^5.2.3
+  file_picker: any
   firebase_auth: any
-  firebase_core: any #^1.24.0
-  firebase_storage: any #^10.3.11
+  firebase_core: any
+  firebase_storage: any
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
@@ -54,6 +54,7 @@ dependencies:
   lottie: ^1.4.2
   mongo_dart: ^0.7.4+1
   provider: ^6.0.3
+  rive: ^0.10.0
   shared_preferences: ^2.0.15
   test: any
   timelines: ^0.1.0
@@ -77,6 +78,7 @@ flutter:
   assets:
     - assets/lottie/
     - assets/images/
+    - assets/rive/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

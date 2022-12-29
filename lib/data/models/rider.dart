@@ -79,6 +79,8 @@ class Rider {
 
   factory Rider.fromFirestore(DocumentSnapshot snapshot) {
     dynamic map = snapshot.data();
+    print('here');
+
     return Rider(
       firstName: map['firstName'],
       lastName: map['lastName'],

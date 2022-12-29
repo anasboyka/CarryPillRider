@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rive/rive.dart';
 
 const kwstyleb12 = TextStyle(
   fontSize: 12,
@@ -372,20 +373,29 @@ InputDecoration inputDeco({
 }
 
 //loading
-Widget loadingPillr(double size, {bool center = true}) {
+
+Widget loadingPillriveR(
+  double size, {
+  bool center = true,
+  RiveAnimationController? controller,
+}) {
   if (center) {
     return Center(
       child: SizedBox(
         width: size.w,
         height: size.w,
-        child: Lottie.asset('assets/lottie/pillLoading.json'),
+        child: const RiveAnimation.asset(
+          'assets/rive/loading_pill.riv',
+        ),
       ),
     );
   } else {
     return SizedBox(
       width: size.w,
       height: size.w,
-      child: Lottie.asset('assets/lottie/pillLoading.json'),
+      child: RiveAnimation.asset(
+        'assets/rive/loading_pill.riv',
+      ),
     );
   }
 }

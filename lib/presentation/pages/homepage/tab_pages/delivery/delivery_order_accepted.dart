@@ -126,16 +126,12 @@ class _DeliveryOrderAcceptedState extends State<DeliveryOrderAccepted> {
                       ),
                     );
                   } else {
-                    return const Scaffold(
-                      backgroundColor: kcWhite,
-                      body: Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      ),
-                    );
+                    return Scaffold(
+                        backgroundColor: kcWhite, body: loadingPillriveR(100));
                   }
                 });
           } else {
-            return const Center(child: CircularProgressIndicator.adaptive());
+            return loadingPillriveR(100);
           }
         });
   }

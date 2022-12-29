@@ -1,5 +1,6 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/auth_repo.dart';
+import 'package:carrypill_rider/data/local/shared_preferences.dart';
 import 'package:carrypill_rider/data/models/rider_uid.dart';
 import 'package:carrypill_rider/logic/provider/provider_location.dart';
 import 'package:carrypill_rider/route_generator.dart';
@@ -13,6 +14,8 @@ import 'data/datarepositories/map_repo/location_repo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Spreferences.init();
+
   await Firebase.initializeApp();
   Position? position = await LocationRepo().initPosition();
   runApp(

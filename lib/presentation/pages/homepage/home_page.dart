@@ -74,13 +74,14 @@ class _HomePageState extends State<HomePage> {
             gaphr(h: 13),
             Icon(
               icon,
-              color: kcPrimary,
+              color: _currentIndex == index ? kcPrimary : kcGreyLabel2,
             ),
             gaphr(h: 5),
             Text(
               label, //'Delivery',
               style: kwtextStyleRD(
-                c: kcPrimary,
+                fw: _currentIndex == index ? kfbold : kfmedium,
+                c: _currentIndex == index ? kcPrimary : kcGreyLabel2,
               ),
             )
           ],

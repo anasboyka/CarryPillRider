@@ -216,7 +216,8 @@ class _OrderRequestState extends State<OrderRequest> {
                 ],
               );
             } else {
-              return CircularProgressIndicator.adaptive();
+              return loadingPillriveR(
+                  250); //CircularProgressIndicator.adaptive();
             }
           }),
     );

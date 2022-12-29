@@ -36,18 +36,45 @@ class FirestoreRepo {
   }
 
   Stream<Rider?> get rider {
-    return riderCollection
-        .doc(uid)
-        .snapshots()
-        .map((doc) => Rider.fromFirestore(doc));
+    return riderCollection.doc(uid).snapshots().map((doc) {
+      return Rider.fromFirestore(doc);
+    });
   }
 
+  // Future testcreate(String uiddddd) {
+  //   return orderCollection.doc('test').set({"test": "test"});
+  // }
+
   Future createRider(Rider rider) async {
-    return await riderCollection.doc(uid).set(rider.toMap());
+    try {
+      print('creating rider');
+      print(uid);
+      final result = await riderCollection.doc(uid).set(rider.toMap());
+      return result;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   Future updateRiderInfoOverwrite(Rider rider) async {
     return await riderCollection.doc(uid).set(rider.toMap());
+  }
+
+  Future updateRiderProfileAll(
+      Profile? profile, String fName, String lName, String phoneNum) async {
+    await riderCollection
+        .doc(uid)
+        .update({"firstName": fName, "lastName": lName, "phoneNum": phoneNum});
+    return await riderCollection.doc(uid).update({'profile': profile?.toMap()});
+  }
+
+  Future updateRiderProfileField(
+      Profile? profile, String fName, String lName, String phoneNum) async {
+    await riderCollection
+        .doc(uid)
+        .update({"firstName": fName, "lastName": lName, "phoneNum": phoneNum});
+    return await riderCollection.doc(uid).update({'profile': profile?.toMap()});
   }
 
   Future updateRiderProfileInfo(Profile? profile) async {
@@ -282,18 +309,42 @@ class FirestoreRepo {
   Future<OrderService> getLatestOrder() async {
     return orderCollection
         .where('riderRef', isEqualTo: uid)
+        //.where('orderDateComplete', isNotEqualTo: null)
         .orderBy('orderDateComplete', descending: true)
         .get()
         .then(
       (snapshot) {
         return OrderService.fromFirestore(snapshot.docs.first);
       },
-    ).onError((error, stackTrace) => OrderService());
+    ).onError(
+      (error, stackTrace) {
+        print(error);
+        return OrderService(totalPay: 0);
+      },
+    );
   }
 
   Stream<List<OrderService>> streamListOrder({bool descending = true}) {
     return orderCollection
         .where('riderRef', isEqualTo: uid)
+        .orderBy('orderDate', descending: descending)
+        .snapshots()
+        .map(_orderListFromSnapshot);
+  }
+
+  Stream<List<OrderService>> streamListOrderDelivery({bool descending = true}) {
+    return orderCollection
+        .where('riderRef', isEqualTo: uid)
+        .where('serviceType', isEqualTo: 'requestDelivery')
+        .orderBy('orderDate', descending: descending)
+        .snapshots()
+        .map(_orderListFromSnapshot);
+  }
+
+  Stream<List<OrderService>> streamListOrderPickup({bool descending = true}) {
+    return orderCollection
+        .where('riderRef', isEqualTo: uid)
+        .where('serviceType', isEqualTo: 'requestPickup')
         .orderBy('orderDate', descending: descending)
         .snapshots()
         .map(_orderListFromSnapshot);

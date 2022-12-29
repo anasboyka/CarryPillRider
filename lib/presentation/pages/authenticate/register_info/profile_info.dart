@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
@@ -28,258 +29,274 @@ class ProfileInfo extends StatefulWidget {
 class _ProfileInfoState extends State<ProfileInfo> {
   final dateOfBirthcon = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
   DateTime? _dateBirth;
   String? gender, filePath, fileName;
   File? file;
   List<String> genders = ["Male", "Female"];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        backgroundColor: kcWhite,
-        elevation: 0,
-        shadowColor: kcTransparent,
-        title: Text(
-          'Profile',
-          style: kwtextStyleRD(fs: 20, fw: kfbold, c: kcPrimary),
-        ),
-      ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        color: kcWhite,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: padSymR(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                gaphr(h: 10),
-                titleInput('Profile photo'),
-                gaphr(),
-                Align(
-                  alignment: Alignment.center,
-                  child: filePath == null
-                      ? DottedBorder(
-                          dashPattern: const [7, 7],
-                          color: kcborderGrey,
-                          strokeWidth: 1,
-                          child: Container(
-                            height: 136.w,
-                            width: 136.w,
-                            decoration: BoxDecoration(
-                              color: kcImageContainer,
-                              borderRadius: borderRadiuscR(r: 4),
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.add_a_photo,
-                                color: kcgrey,
-                                size: 40,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            backgroundColor: kcWhite,
+            elevation: 0,
+            shadowColor: kcTransparent,
+            title: Text(
+              'Profile',
+              style: kwtextStyleRD(fs: 20, fw: kfbold, c: kcPrimary),
+            ),
+          ),
+          body: Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: kcWhite,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: padSymR(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    gaphr(h: 10),
+                    titleInput('Profile photo'),
+                    gaphr(),
+                    Align(
+                      alignment: Alignment.center,
+                      child: filePath == null
+                          ? DottedBorder(
+                              dashPattern: const [7, 7],
+                              color: kcborderGrey,
+                              strokeWidth: 1,
+                              child: Container(
+                                height: 136.w,
+                                width: 136.w,
+                                decoration: BoxDecoration(
+                                  color: kcImageContainer,
+                                  borderRadius: borderRadiuscR(r: 4),
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.add_a_photo,
+                                    color: kcgrey,
+                                    size: 40,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : ClipRRect(
+                              borderRadius: borderRadiuscR(r: 10),
+                              child: SizedBox(
+                                height: 136.w,
+                                width: 136.w,
+                                child: Image.file(
+                                  file!,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      : ClipRRect(
-                          borderRadius: borderRadiuscR(r: 10),
-                          child: SizedBox(
-                            height: 136.w,
-                            width: 136.w,
-                            child: Image.file(
-                              file!, //File(filePath!),
-                            ),
-                          ),
-                        ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: MaterialButton(
-                    minWidth: 136.w,
-                    height: 26,
-                    color: kcPrimary,
-                    shape: cornerR(r: 4),
-                    onPressed: () async {
-                      // try {
-                      final results = await FilePicker.platform.pickFiles(
-                        allowMultiple: false,
-                        type: FileType.custom,
-                        allowedExtensions: ['jpg', 'png', 'jpeg'],
-                        // allowCompression: true,
-                      );
-                      // final results = await ImagePicker()
-                      //     .pickImage(source: ImageSource.gallery);
-
-                      // print(results);
-                      if (results != null) {
-                        // final path = results.path;
-                        final path = results.files.single.path!;
-                        File pickedfile = File(path);
-                        Image(image: FileImage(pickedfile))
-                            .image
-                            .resolve(const ImageConfiguration())
-                            .addListener(
-                          ImageStreamListener(
-                            (ImageInfo info, bool syncCall) {
-                              int width = info.image.width;
-                              int height = info.image.height;
-                              print(width);
-                              print(height);
-                            },
-                          ),
-                        );
-                        final img.Image? image =
-                            img.decodeImage(await File(path).readAsBytes());
-                        final img.Image orientedImage =
-                            img.bakeOrientation(image!);
-                        File newfile = await File(path)
-                            .writeAsBytes(img.encodeJpg(orientedImage));
-
-                        setState(() {
-                          file = newfile;
-                          filePath = path;
-                          //fileName = results.name;
-                          fileName = results.files.single.name;
-                        });
-                      }
-                      // } on Exception catch (e) {
-                      //   print(e);
-                      //   // TODO
-                      // }
-                    },
-                    child: Text(
-                      'Browse file',
-                      style: kwtextStyleRD(fs: 14, fw: kfbold, c: kcWhite),
                     ),
-                  ),
-                ),
-                gaphr(h: 16),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      titleInput('Date of Birth'),
-                      gaphr(h: 12),
-                      TextFormField(
-                        controller: dateOfBirthcon,
-                        style: kwtextStyleRD(
-                          c: kcPrimary,
-                          fs: 14,
-                          fw: kfsemibold,
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "field cannot be empty";
-                          }
-                          return null;
-                        },
-                        readOnly: true,
-                        onTap: () async => pickDate(),
-                        decoration: inputDeco(
-                          isDate: true,
-                          contentPadding: padSymR(),
-                          borderColor: kchintTextfield,
-                          borderEnableColor: kchintTextfield,
-                          fsHint: 14,
-                          fwHint: kfregular,
-                          onPressedTrailing: pickDate,
-                        ),
-                      ),
-                      gaphr(),
-                      titleInput('Gender'),
-                      gaphr(h: 12),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton2<String>(
-                          style: kwtextStyleRD(
-                            c: kcPrimary,
-                            fs: 12,
-                            fw: FontWeight.w600,
-                          ),
-                          buttonDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            border: Border.all(
-                              color: kchintTextfield,
-                              width: 1,
-                            ),
-                          ),
-                          buttonWidth: double.infinity,
-                          buttonPadding: padOnlyR(l: 20, r: 5),
-                          icon: Icon(
-                            Icons.expand_more,
-                            size: 35,
-                            color: gender != null ? kcPrimary : kchintTextfield,
-                          ),
-                          value: gender,
-                          items: genders
-                              .map(
-                                (e) => DropdownMenuItem<String>(
-                                  value: e,
-                                  child: Text(e),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
+                    Align(
+                      alignment: Alignment.center,
+                      child: MaterialButton(
+                        minWidth: 136.w,
+                        height: 26,
+                        color: kcPrimary,
+                        shape: cornerR(r: 4),
+                        onPressed: () async {
+                          setState(() {
+                            loading = true;
+                          });
+                          final results = await FilePicker.platform.pickFiles(
+                              allowMultiple: false, type: FileType.image);
+
+                          if (results != null) {
+                            final path = results.files.single.path!;
+                            File pickedfile = File(path);
+                            Image(image: FileImage(pickedfile))
+                                .image
+                                .resolve(const ImageConfiguration())
+                                .addListener(
+                              ImageStreamListener(
+                                (ImageInfo info, bool syncCall) {
+                                  int width = info.image.width;
+                                  int height = info.image.height;
+                                  print(width);
+                                  print(height);
+                                },
+                              ),
+                            );
+                            final img.Image? image =
+                                img.decodeImage(await File(path).readAsBytes());
+                            final img.Image orientedImage =
+                                img.bakeOrientation(image!);
+                            File newfile = await File(path)
+                                .writeAsBytes(img.encodeJpg(orientedImage));
+
                             setState(() {
-                              gender = value!;
+                              file = newfile;
+                              filePath = path;
+                              fileName = results.files.single.name;
+                              loading = false;
                             });
-                          },
+                          } else {
+                            setState(() {
+                              loading = false;
+                            });
+                          }
+                        },
+                        child: Text(
+                          'Browse file',
+                          style: kwtextStyleRD(fs: 14, fw: kfbold, c: kcWhite),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                gaphr(h: 200),
-                MaterialButton(
-                  minWidth: double.infinity,
-                  height: 64,
-                  color: kcPrimary,
-                  shape: cornerR(r: 12),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if (filePath != null && gender != null) {
-                        //todo storage
-                        final String? url =
-                            await StorageRepo(uid: widget.rider.documentID)
-                                .uploadRiderProfileImage(filePath!, fileName!);
-                        // print(url);
-                        if (url != null) {
-                          Profile profile = Profile(
-                              gender: gender,
-                              profileImageUrl: url,
-                              birthDate: _dateBirth);
-                          await FirestoreRepo(uid: widget.rider.documentID)
-                              .updateRiderProfileInfo(profile);
-                          if (!mounted) return;
-                          Navigator.of(context).pop();
-                        } else {
-                          if (!mounted) return;
-                          kwShowSnackbar(context, 'error upload file');
-                        }
-                      } else {
-                        kwShowSnackbar(context,
-                            'Please fill in all the required information');
-                      }
-                    } else {
-                      kwShowSnackbar(context,
-                          'Please fill in all the required information');
-                    }
-                  },
-                  child: Text(
-                    'Save',
-                    style: kwtextStyleRD(
-                      fs: 20,
-                      fw: kfbold,
-                      c: kcWhite,
                     ),
-                  ),
+                    gaphr(h: 16),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          titleInput('Date of Birth'),
+                          gaphr(h: 12),
+                          TextFormField(
+                            controller: dateOfBirthcon,
+                            style: kwtextStyleRD(
+                              c: kcPrimary,
+                              fs: 14,
+                              fw: kfsemibold,
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "field cannot be empty";
+                              }
+                              return null;
+                            },
+                            readOnly: true,
+                            onTap: () async => pickDate(),
+                            decoration: inputDeco(
+                              isDate: true,
+                              contentPadding: padSymR(),
+                              borderColor: kchintTextfield,
+                              borderEnableColor: kchintTextfield,
+                              fsHint: 14,
+                              fwHint: kfregular,
+                              onPressedTrailing: pickDate,
+                            ),
+                          ),
+                          gaphr(),
+                          titleInput('Gender'),
+                          gaphr(h: 12),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              style: kwtextStyleRD(
+                                c: kcPrimary,
+                                fs: 12,
+                                fw: FontWeight.w600,
+                              ),
+                              buttonDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.r),
+                                border: Border.all(
+                                  color: kchintTextfield,
+                                  width: 1,
+                                ),
+                              ),
+                              buttonWidth: double.infinity,
+                              buttonPadding: padOnlyR(l: 20, r: 5),
+                              icon: Icon(
+                                Icons.expand_more,
+                                size: 35,
+                                color: gender != null
+                                    ? kcPrimary
+                                    : kchintTextfield,
+                              ),
+                              value: gender,
+                              items: genders
+                                  .map(
+                                    (e) => DropdownMenuItem<String>(
+                                      value: e,
+                                      child: Text(e),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  gender = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    gaphr(h: 200),
+                    MaterialButton(
+                      minWidth: double.infinity,
+                      height: 64,
+                      color: kcPrimary,
+                      shape: cornerR(r: 12),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
+                          if (filePath != null && gender != null) {
+                            final String? url = await StorageRepo(
+                                    uid: widget.rider.documentID)
+                                .uploadRiderProfileImage(filePath!, fileName!);
+
+                            if (url != null) {
+                              Profile profile = Profile(
+                                  gender: gender,
+                                  profileImageUrl: url,
+                                  birthDate: _dateBirth);
+                              await FirestoreRepo(uid: widget.rider.documentID)
+                                  .updateRiderProfileInfo(profile);
+                              if (!mounted) return;
+                              Navigator.of(context).pop();
+                            } else {
+                              if (!mounted) return;
+                              kwShowSnackbar(context, 'error upload file');
+                            }
+                          } else {
+                            setState(() {
+                              loading = false;
+                            });
+                            kwShowSnackbar(context,
+                                'Please fill in all the required information');
+                          }
+                        } else {
+                          kwShowSnackbar(context,
+                              'Please fill in all the required information');
+                        }
+                      },
+                      child: Text(
+                        'Save',
+                        style: kwtextStyleRD(
+                          fs: 20,
+                          fw: kfbold,
+                          c: kcWhite,
+                        ),
+                      ),
+                    ),
+                    gaphr(h: 30)
+                  ],
                 ),
-                gaphr(h: 30)
-              ],
+              ),
             ),
           ),
         ),
-      ),
+        loading
+            ? Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400.withOpacity(0.7),
+                ),
+                child: loadingPillriveR(100),
+              )
+            : const SizedBox(),
+      ],
     );
   }
 

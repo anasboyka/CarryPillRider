@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -38,14 +39,28 @@ class StorageRepo {
 
   Future<String?> uploadRiderDriverLicenseImage(
       File file, String fileName) async {
+    //File file = File(filePath);
     final ref = storage.ref().child('riders').child('/$uid/');
-
+    Uint8List bytesdata = file.readAsBytesSync();
     try {
-      await ref.child('driver_license').putFile(file);
-      return await ref.child('driver_license').getDownloadURL();
+      // await ref.child('driverlicense').putData(bytesdata);
+      final TaskSnapshot snapshot =
+          await ref.child('driverLicense').putFile(file);
+      print(snapshot);
+      return await snapshot.ref.getDownloadURL();
+      // return await ref.child('driverLicense').getDownloadURL();
     } catch (e) {
       print(e);
-      return null;
+      try {
+        final TaskSnapshot snapshot =
+            await ref.child('driverLicense').putData(bytesdata);
+        //print(await snapshot.ref.getDownloadURL());
+        return await snapshot.ref.getDownloadURL();
+        // return await ref.child('driverLicense').getDownloadURL();
+      } on Exception catch (e) {
+        print(e);
+        return null;
+      }
     }
   }
 }

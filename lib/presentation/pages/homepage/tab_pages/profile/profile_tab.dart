@@ -1,6 +1,7 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/models/order_service.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:carrypill_rider/data/models/rider_uid.dart';
 import 'package:flutter/material.dart';
@@ -105,151 +106,188 @@ class _ProfileTabState extends State<ProfileTab> {
                     ),
                   ),
                   gaphr(),
-                  Padding(
-                    padding: padSymR(),
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: kcWhite,
-                        borderRadius: borderRadiuscR(
-                          r: 8,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(0, 3),
-                            blurRadius: 6,
-                            color: kcBlack.withOpacity(0.16),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: padSymR(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            gaphr(),
-                            Text(
-                              'Earning',
-                              style: kwtextStyleRD(
-                                  c: kcgrey, fs: 16, fw: kfmedium),
-                            ),
-                            //TODO earning
-                            Text(
-                              'RM ${rider.earning?.toStringAsFixed(2) ?? '0.00'}',
-                              style: kwtextStyleRD(
-                                  fs: 26, fw: kfbold, c: kcProfit),
-                            ),
-                            gaphr(),
-                            dividerC(c: kcborderGrey),
-                            gaphr(h: 14),
-                            Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: borderRadiuscR(r: 12),
-                                  child: Container(
-                                    width: 85.w,
-                                    height: 58.h,
-                                    decoration: const BoxDecoration(
-                                      color: kcBgHome,
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: rider.vehicleType == "Motorcycle"
-                                        ? Image.asset(
-                                            'assets/images/motorcycle.png',
-                                            width: 60,
-                                          )
-                                        : rider.vehicleType == "Car"
-                                            ? Image.asset(
-                                                'assets/images/car.png',
-                                                width: 60,
-                                              )
-                                            : null,
-                                  ),
+                  StreamBuilder(
+                      stream: FirestoreRepo(uid: rider.documentID)
+                          .streamListOrder(),
+                      builder: (_, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          List<OrderService> orderService = snapshot.data;
+                          return Padding(
+                            padding: padSymR(),
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: kcWhite,
+                                borderRadius: borderRadiuscR(
+                                  r: 8,
                                 ),
-                                gapwr(w: 12),
-                                Column(
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(0, 3),
+                                    blurRadius: 6,
+                                    color: kcBlack.withOpacity(0.16),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: padSymR(),
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    gaphr(),
                                     Text(
-                                      rider.vehicle?.vehicleBrand ??
-                                          'Not Specified',
+                                      'Earning',
                                       style: kwtextStyleRD(
-                                        fs: 16,
-                                        fw: kfbold,
-                                        c: kcBlack2,
-                                      ),
+                                          c: kcgrey, fs: 16, fw: kfmedium),
                                     ),
+                                    //TODO earning
                                     Text(
-                                      rider.vehicle!
-                                          .vehiclePlateNum!, //'ABC1234',
+                                      'RM ${rider.earning?.toStringAsFixed(2) ?? '0.00'}',
                                       style: kwtextStyleRD(
-                                        c: kcgrey,
-                                        fs: 14,
-                                        fw: kfbold,
-                                      ),
+                                          fs: 26, fw: kfbold, c: kcProfit),
                                     ),
+                                    gaphr(),
+                                    dividerC(c: kcborderGrey),
+                                    gaphr(h: 14),
+                                    Row(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: borderRadiuscR(r: 12),
+                                          child: Container(
+                                            width: 85.w,
+                                            height: 58.h,
+                                            decoration: const BoxDecoration(
+                                              color: kcBgHome,
+                                            ),
+                                            alignment: Alignment.center,
+                                            child: rider.vehicleType ==
+                                                    "Motorcycle"
+                                                ? Image.asset(
+                                                    'assets/images/motorcycle.png',
+                                                    width: 60,
+                                                  )
+                                                : rider.vehicleType == "Car"
+                                                    ? Image.asset(
+                                                        'assets/images/car.png',
+                                                        width: 60,
+                                                      )
+                                                    : null,
+                                          ),
+                                        ),
+                                        gapwr(w: 12),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              rider.vehicle?.vehicleBrand ??
+                                                  'Not Specified',
+                                              style: kwtextStyleRD(
+                                                fs: 16,
+                                                fw: kfbold,
+                                                c: kcBlack2,
+                                              ),
+                                            ),
+                                            Text(
+                                              rider.vehicle!
+                                                  .vehiclePlateNum!, //'ABC1234',
+                                              style: kwtextStyleRD(
+                                                c: kcgrey,
+                                                fs: 14,
+                                                fw: kfbold,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    gaphr(),
+                                    dividerC(c: kcborderGrey),
+                                    gaphr(h: 14),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                'Total order history:',
+                                                style: kwtextStyleRD(
+                                                  c: kcgrey,
+                                                  fs: 16,
+                                                  fw: kfmedium,
+                                                ),
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                orderService.isEmpty
+                                                    ? '0'
+                                                    : orderService.length
+                                                        .toString(),
+                                                //'13',
+                                                style: kwtextStyleRD(
+                                                  c: kcgrey,
+                                                  fs: 16,
+                                                  fw: kfbold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        // Expanded(
+                                        //   child: Row(
+                                        //     children: [
+                                        //       Text(
+                                        //         'Work time:',
+                                        //         style: kwtextStyleRD(
+                                        //           c: kcgrey,
+                                        //           fs: 16,
+                                        //           fw: kfmedium,
+                                        //         ),
+                                        //       ),
+                                        //       Text(
+                                        //         '4hrs',
+                                        //         style: kwtextStyleRD(
+                                        //           c: kcgrey,
+                                        //           fs: 16,
+                                        //           fw: kfbold,
+                                        //         ),
+                                        //       ),
+                                        //     ],
+                                        //   ),
+                                        // )
+                                      ],
+                                    ),
+                                    gaphr(h: 12),
                                   ],
-                                )
-                              ],
-                            ),
-                            gaphr(),
-                            dividerC(c: kcborderGrey),
-                            gaphr(h: 14),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Total order history:',
-                                        style: kwtextStyleRD(
-                                          c: kcgrey,
-                                          fs: 16,
-                                          fw: kfmedium,
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        '13',
-                                        style: kwtextStyleRD(
-                                          c: kcgrey,
-                                          fs: 16,
-                                          fw: kfbold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 ),
-                                // Expanded(
-                                //   child: Row(
-                                //     children: [
-                                //       Text(
-                                //         'Work time:',
-                                //         style: kwtextStyleRD(
-                                //           c: kcgrey,
-                                //           fs: 16,
-                                //           fw: kfmedium,
-                                //         ),
-                                //       ),
-                                //       Text(
-                                //         '4hrs',
-                                //         style: kwtextStyleRD(
-                                //           c: kcgrey,
-                                //           fs: 16,
-                                //           fw: kfbold,
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // )
-                              ],
+                              ),
                             ),
-                            gaphr(h: 12),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: padSymR(),
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: kcWhite,
+                                borderRadius: borderRadiuscR(
+                                  r: 8,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: const Offset(0, 3),
+                                    blurRadius: 6,
+                                    color: kcBlack.withOpacity(0.16),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: loadingPillriveR(100),
+                              ),
+                            ),
+                          );
+                        }
+                      }),
                   gaphr(),
                   dataTile(
                     'Phone',
@@ -271,7 +309,15 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
           );
         } else {
-          return CircularProgressIndicator.adaptive();
+          return Scaffold(
+            body: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Center(
+                child: loadingPillriveR(100),
+              ),
+            ),
+          ); //CircularProgressIndicator.adaptive();
         }
       },
     );

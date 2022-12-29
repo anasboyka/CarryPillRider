@@ -8,13 +8,18 @@ import 'package:carrypill_rider/data/models/rider_uid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ShiftTab extends StatelessWidget {
+class ShiftTab extends StatefulWidget {
   final Rider rider;
   const ShiftTab({
     required this.rider,
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<ShiftTab> createState() => _ShiftTabState();
+}
+
+class _ShiftTabState extends State<ShiftTab> {
   @override
   Widget build(BuildContext context) {
     final riderAuthstate = Provider.of<RiderAuth?>(context);
@@ -51,7 +56,7 @@ class ShiftTab extends StatelessWidget {
                   ),
                   gaphr(h: 8),
                   Text(
-                    'RM ${rider.earning!.toStringAsFixed(2)}', //'+RM 432.00',
+                    'RM ${widget.rider.earning!.toStringAsFixed(2)}', //'+RM 432.00',
                     style: kwtextStyleRD(
                       fs: 16,
                       fw: FontWeight.bold,
@@ -66,7 +71,7 @@ class ShiftTab extends StatelessWidget {
           FutureBuilder(
               future: FirestoreRepo(uid: riderAuthstate!.uid).getLatestOrder(),
               builder: (_, AsyncSnapshot snapshot) {
-                // print(snapshot);
+                print(snapshot.data);
                 if (snapshot.hasData) {
                   OrderService orderService = snapshot.data;
                   return Container(
@@ -112,7 +117,9 @@ class ShiftTab extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                "Recent profit: ",
+                                orderService.orderDateComplete != null
+                                    ? "Recent profit: "
+                                    : "Current profit: ",
                                 style: kwtextStyleRD(
                                   fs: 18,
                                   fw: FontWeight.w500,
@@ -133,8 +140,8 @@ class ShiftTab extends StatelessWidget {
                               fw: FontWeight.w500,
                             ),
                           ),
-                          gaphr(h: rider.isWorking ? 0 : 20),
-                          rider.isWorking
+                          gaphr(h: widget.rider.isWorking ? 0 : 20),
+                          widget.rider.isWorking
                               ? const SizedBox()
                               : const Text(
                                   'are you ready?',
@@ -151,13 +158,13 @@ class ShiftTab extends StatelessWidget {
                             onPressed: () async {
                               await FirestoreRepo(uid: riderAuthstate.uid)
                                   .updateWorkingStatus(
-                                      !rider.isWorking,
-                                      rider.isWorking
+                                      !widget.rider.isWorking,
+                                      widget.rider.isWorking
                                           ? ksStopAcceptingOrder
                                           : ksIsWaitingForOrder);
                             },
                             child: Text(
-                              rider.isWorking
+                              widget.rider.isWorking
                                   ? 'End Shift'
                                   : 'Start Working Now',
                               style: kwtextStyleRD(
@@ -175,8 +182,8 @@ class ShiftTab extends StatelessWidget {
                         width: double.infinity,
                         height: 100, //MediaQuery.of(context).size.height,
                         child: Center(
-                          child: loadingPillr(
-                            100,
+                          child: loadingPillriveR(
+                            250,
                           ),
                         ) //CircularProgressIndicator.adaptive(),
                         ),

@@ -1,5 +1,6 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
+import 'package:carrypill_rider/data/datarepositories/firebase_repo/auth_repo.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,10 @@ class _RegisterInfoState extends State<RegisterInfo> {
         shadowColor: kcTransparent,
         leading: IconButton(
             splashRadius: 20,
-            onPressed: () {},
+            onPressed: () async {
+              await AuthRepo().signOut();
+              // Navigator.of(context).pop();
+            },
             icon: const Icon(
               Icons.arrow_back,
               color: kcPrimary,

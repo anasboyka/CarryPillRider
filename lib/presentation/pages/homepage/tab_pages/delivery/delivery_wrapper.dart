@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:carrypill_rider/constant/constant_widget.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
 import 'package:carrypill_rider/data/models/all_enum.dart';
 import 'package:carrypill_rider/data/models/order_service.dart';
@@ -87,7 +88,8 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
           //   return DeliveryTab();
           // }
         } else {
-          return const CircularProgressIndicator.adaptive();
+          return loadingPillriveR(
+              250); //const  CircularProgressIndicator.adaptive();
         }
       },
     );

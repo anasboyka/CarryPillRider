@@ -489,13 +489,14 @@ class _StatusTabDeliveryState extends State<StatusTabPickup>
                                 onPressed: () async {
                                   //todo upload photo
 
-                                  final results =
-                                      await FilePicker.platform.pickFiles(
-                                    allowMultiple: false,
-                                    type: FileType.custom,
-                                    allowedExtensions: ['jpg', 'png', 'jpeg'],
-                                    // allowCompression: true,
-                                  );
+                                  final results = await FilePicker.platform
+                                      .pickFiles(
+                                          allowMultiple: false,
+                                          type: FileType.image
+                                          // type: FileType.custom,
+                                          // allowedExtensions: ['jpg', 'png', 'jpeg'],
+                                          // allowCompression: true,
+                                          );
                                   if (results != null) {
                                     int width = 1;
                                     int height = 0;

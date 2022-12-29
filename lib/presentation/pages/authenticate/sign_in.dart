@@ -16,19 +16,13 @@ class _SignInState extends State<SignIn> {
   TextEditingController passcon = TextEditingController();
 
   bool isHidden = true, isComplete = false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child:
-            // MediaQuery.of(context).viewInsets.bottom == 0
-            //     ? Padding(
-            //         padding: padSymR(),
-            //         child: childContent(context),
-            //       )
-            //     :
-            SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Padding(
             padding: padSymR(),
             child: childContent(context, isKeyboardinput: true),
@@ -161,6 +155,9 @@ class _SignInState extends State<SignIn> {
             ),
           ),
           onPressed: () async {
+            setState(() {
+              loading = true;
+            });
             try {
               dynamic result = await AuthRepo()
                   .signInWithEmailAndPassword(emailcon.text, passcon.text);
@@ -172,6 +169,9 @@ class _SignInState extends State<SignIn> {
               kwShowSnackbar(context, 'error $e');
               // TODO
             }
+            setState(() {
+              loading = false;
+            });
           },
         ),
         isKeyboardinput ? gaphr(h: 0) : gaphr(h: 130),

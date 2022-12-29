@@ -1,3 +1,4 @@
+import 'package:carrypill_rider/constant/constant_widget.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/auth_repo.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
@@ -20,7 +21,7 @@ class WrapperHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //AuthRepo().signOut();
+    // AuthRepo().signOut();
     final riderAuthstate = Provider.of<RiderAuth?>(context);
 
     if (riderAuthstate != null) {
@@ -28,9 +29,11 @@ class WrapperHome extends StatelessWidget {
       return StreamBuilder(
           stream: FirestoreRepo(uid: riderAuthstate.uid).rider,
           builder: (_, AsyncSnapshot snapshot) {
-            // print(snapshot);
+            print(
+                'snapshot.data rider = ${snapshot.data} id = ${riderAuthstate.uid}');
             if (snapshot.hasData) {
               Rider rider = snapshot.data;
+              print('here $rider');
               bool isProfileComplete = rider.isProfileComplete ?? false;
               if (isProfileComplete) {
                 return StreamProvider<Rider?>.value(
@@ -53,9 +56,15 @@ class WrapperHome extends StatelessWidget {
               }
             } else {
               // print('here');
-              return const Scaffold(
+              return Scaffold(
                 body: Center(
-                  child: CircularProgressIndicator.adaptive(),
+                  child: SizedBox(
+                    height: 250,
+                    width: 250,
+                    child: Center(
+                      child: loadingPillriveR(100),
+                    ),
+                  ),
                 ),
               );
             }
