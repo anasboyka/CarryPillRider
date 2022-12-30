@@ -155,23 +155,25 @@ class _SignInState extends State<SignIn> {
             ),
           ),
           onPressed: () async {
-            setState(() {
-              loading = true;
-            });
-            try {
-              dynamic result = await AuthRepo()
-                  .signInWithEmailAndPassword(emailcon.text, passcon.text);
-              if (!mounted) return;
-              Navigator.of(context).pop();
-              print('sign in');
-              print(result);
-            } on Exception catch (e) {
-              kwShowSnackbar(context, 'error $e');
-              // TODO
+            if (isComplete) {
+              setState(() {
+                loading = true;
+              });
+              try {
+                dynamic result = await AuthRepo()
+                    .signInWithEmailAndPassword(emailcon.text, passcon.text);
+                if (!mounted) return;
+                Navigator.of(context).pop();
+                print('sign in');
+                print(result);
+              } on Exception catch (e) {
+                kwShowSnackbar(context, 'error $e');
+                // TODO
+              }
+              setState(() {
+                loading = false;
+              });
             }
-            setState(() {
-              loading = false;
-            });
           },
         ),
         isKeyboardinput ? gaphr(h: 0) : gaphr(h: 130),
