@@ -148,7 +148,7 @@ class _OrderRequestState extends State<OrderRequest> {
                     ),
                   ),
                   SizedBox(
-                    height: Platform.isAndroid ? 100 : 155,
+                    height: Platform.isAndroid ? 100 : 130.h,
                     width: double.infinity,
                     child: Column(
                       children: [
