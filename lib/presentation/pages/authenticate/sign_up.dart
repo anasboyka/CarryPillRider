@@ -346,24 +346,24 @@ class _SignUpState extends State<SignUp> {
                               emailCon.text.trim(),
                               pass1Con.text,
                             );
-                            print('result=$result');
+                            // print('result=$result');
 
                             if (result is UserCredential) {
-                              print('here sign up ora ora');
+                              // print('here sign up ora ora');
                               User? user = result.user;
                               if (user != null) {
-                                print('create rider');
+                                // print('create rider');
                                 await FirestoreRepo(uid: result.user!.uid)
                                     .createRider(rider);
                                 if (!mounted) return;
                                 Navigator.of(context).pop();
                               } else {
-                                print('user = null');
+                                // print('user = null');
                                 if (!mounted) return;
                                 kwShowSnackbar(context, "Error Sign Up");
                               }
                             } else if (result is String) {
-                              print('result string');
+                              // print('result string');
                               if (result == ksErrorEmailAlreadyUsed) {
                                 if (!mounted) return;
                                 kwShowSnackbar(context,

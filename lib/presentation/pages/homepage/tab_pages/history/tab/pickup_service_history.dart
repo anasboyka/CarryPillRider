@@ -51,7 +51,7 @@ class _PickupServiceHistoryState extends State<PickupServiceHistory> {
                       stream: FirestoreRepo(uid: rider!.documentID!)
                           .streamListOrderPickup(),
                       builder: ((_, AsyncSnapshot snapshot) {
-                        print(snapshot);
+                        // print(snapshot);
                         if (snapshot.hasData) {
                           List<OrderService> orderServiceList = snapshot.data;
                           if (orderServiceList.isNotEmpty) {

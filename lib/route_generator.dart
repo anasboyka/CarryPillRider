@@ -1,3 +1,4 @@
+import 'package:carrypill_rider/data/models/facility.dart';
 import 'package:carrypill_rider/data/models/order_service.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:carrypill_rider/main.dart';
@@ -8,6 +9,7 @@ import 'package:carrypill_rider/presentation/pages/authenticate/sign_up.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/order_request.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile/profile_update.dart';
 import 'package:carrypill_rider/presentation/pages/wrapper_home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

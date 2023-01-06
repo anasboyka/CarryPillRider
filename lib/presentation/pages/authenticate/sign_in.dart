@@ -165,7 +165,7 @@ class _SignInState extends State<SignIn> {
                 if (!mounted) return;
                 Navigator.of(context).pop();
                 print('sign in');
-                print(result);
+                // print(result);
               } on Exception catch (e) {
                 kwShowSnackbar(context, 'error $e');
                 // TODO

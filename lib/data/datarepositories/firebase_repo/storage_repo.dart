@@ -46,7 +46,7 @@ class StorageRepo {
       // await ref.child('driverlicense').putData(bytesdata);
       final TaskSnapshot snapshot =
           await ref.child('driverLicense').putFile(file);
-      print(snapshot);
+      //print(snapshot);
       return await snapshot.ref.getDownloadURL();
       // return await ref.child('driverLicense').getDownloadURL();
     } catch (e) {

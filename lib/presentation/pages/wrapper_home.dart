@@ -29,11 +29,11 @@ class WrapperHome extends StatelessWidget {
       return StreamBuilder(
           stream: FirestoreRepo(uid: riderAuthstate.uid).rider,
           builder: (_, AsyncSnapshot snapshot) {
-            print(
-                'snapshot.data rider = ${snapshot.data} id = ${riderAuthstate.uid}');
+            // print(
+            //     'snapshot.data rider = ${snapshot.data} id = ${riderAuthstate.uid}');
             if (snapshot.hasData) {
               Rider rider = snapshot.data;
-              print('here $rider');
+              //print('here $rider');
               bool isProfileComplete = rider.isProfileComplete ?? false;
               if (isProfileComplete) {
                 return StreamProvider<Rider?>.value(
