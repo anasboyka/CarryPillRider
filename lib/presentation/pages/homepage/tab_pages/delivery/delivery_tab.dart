@@ -24,7 +24,7 @@ class _DeliveryTabState extends State<DeliveryTab> {
   Widget build(BuildContext context) {
     Rider rider = Provider.of<Rider?>(context)!;
     RiderAuth riderAuth = Provider.of<RiderAuth?>(context)!;
-    print(rider);
+    // print(rider);
     return Scaffold(
       appBar: AppBar(
         title: Text(

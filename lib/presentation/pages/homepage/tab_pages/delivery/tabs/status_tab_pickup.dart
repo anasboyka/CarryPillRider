@@ -137,7 +137,7 @@ class _StatusTabDeliveryState extends State<StatusTabPickup>
                 shape: cornerR(r: 8),
                 onPressed: () async {
                   if (file != null) {
-                    print('buat firestore');
+                    // print('buat firestore');
                     final String? url =
                         await StorageRepo(uid: orderService.documentID)
                             .uploadOrderTokenImage(file!);

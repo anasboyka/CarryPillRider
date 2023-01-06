@@ -71,7 +71,7 @@ class _ShiftTabState extends State<ShiftTab> {
           FutureBuilder(
               future: FirestoreRepo(uid: riderAuthstate!.uid).getLatestOrder(),
               builder: (_, AsyncSnapshot snapshot) {
-                print(snapshot.data);
+                // print(snapshot.data);
                 if (snapshot.hasData) {
                   OrderService orderService = snapshot.data;
                   return Container(

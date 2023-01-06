@@ -51,7 +51,7 @@ class _DeliveryServiceHistoryState extends State<DeliveryServiceHistory> {
                       stream: FirestoreRepo(uid: rider!.documentID!)
                           .streamListOrderDelivery(),
                       builder: ((_, AsyncSnapshot snapshot) {
-                        print(snapshot);
+                        // print(snapshot);
                         if (snapshot.hasData) {
                           List<OrderService> orderServiceList = snapshot.data;
                           if (orderServiceList.isNotEmpty) {
