@@ -82,11 +82,6 @@ class _StatusTabDeliveryState extends State<StatusTabPickup>
         height: double.infinity,
         width: double.infinity,
         child: Stepper(
-          // onStepContinue: () {
-          //   setState(() {
-          //     currentStep = currentStep + 1;
-          //   });
-          // },
           type: StepperType.vertical,
           currentStep: currentStep,
           controlsBuilder: (context, details) {
