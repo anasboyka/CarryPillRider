@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'data/datarepositories/map_repo/location_repo.dart';
 
 void main() async {
-  //al punya testing branch skali lagi
+  //master
   WidgetsFlutterBinding.ensureInitialized();
   await Spreferences.init();
 
