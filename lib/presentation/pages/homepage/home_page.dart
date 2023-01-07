@@ -31,10 +31,6 @@ class _HomePageState extends State<HomePage> {
         children: [
           DeliveryWrapper(),
           MapTab(),
-          HistoryTab(),
-          // ProfileUpdate(
-          //   rider: rider!,
-          // ),
           ProfileTab(),
         ],
       ),
@@ -55,8 +51,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             iconTabButton(0, 'Delivery', Icons.delivery_dining),
             iconTabButton(1, 'Map', Icons.map),
-            iconTabButton(2, 'History', Icons.history),
-            iconTabButton(3, 'profile', Icons.person_outline),
+            iconTabButton(2, 'profile', Icons.person_outline),
           ],
         ),
       ),

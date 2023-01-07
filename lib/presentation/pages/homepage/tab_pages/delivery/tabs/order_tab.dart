@@ -245,58 +245,6 @@ class _OrderTabState extends State<OrderTab> {
                         color: Colors.transparent,
                         child: ListTile(
                           contentPadding: padSymR(),
-                          // onTap: () {
-                          //   print('press');
-                          // },
-                          title: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    gaphr(h: 10),
-                                    Text(
-                                      'Address:',
-                                      style: kwtextStyleRD(
-                                          c: kcBlack,
-                                          fs: 14,
-                                          fw: FontWeight.bold),
-                                    ),
-                                    gaphr(h: 5),
-                                    Text(
-                                      patient
-                                          .address!, //'MAXIM CITY LIGHTS Building, JALAN SENTUL PASAR Section TAMAN PELANGI, 51100 KUALA LUMPUR WILAYAH PERSEKUTUAN',
-                                      style: kwtextStyleRD(
-                                        c: kcPrimary,
-                                        fs: 12,
-                                        fw: FontWeight.w500,
-                                      ),
-                                    ),
-                                    gaphr(h: 16)
-                                  ],
-                                ),
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    //TODO display map kalau sempat
-                                  },
-                                  icon: const Icon(
-                                    Icons.location_pin,
-                                    color: kcPrimary,
-                                  )),
-                            ],
-                          ),
-                        ),
-                      ),
-                      divider(c: kcdisabledBtn, t: 1.3),
-                      Material(
-                        color: Colors.transparent,
-                        child: ListTile(
-                          contentPadding: padSymR(),
-                          // onTap: () {
-                          //   print('press');
-                          // },
                           title: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
