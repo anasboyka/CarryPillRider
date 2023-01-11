@@ -94,8 +94,7 @@ class _StatusTabDeliveryState extends State<StatusTabDelivery>
                 shape: cornerR(r: 8),
                 onPressed: () async {
                   await FirestoreRepo().updateStatusOrder(
-                      StatusOrder.orderPreparing,
-                      widget.orderService.documentID!);
+                      StatusOrder.driverQueue, widget.orderService.documentID!);
                   setState(() {
                     currentStep = currentStep + 1;
                   });
