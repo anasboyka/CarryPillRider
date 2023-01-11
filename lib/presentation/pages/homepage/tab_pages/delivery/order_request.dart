@@ -22,6 +22,8 @@ class OrderRequest extends StatefulWidget {
 class _OrderRequestState extends State<OrderRequest> {
   int durationToAccept = 60;
   late GoogleMapController mapController;
+  Timer? _timer;
+  int duration = 60;
 
   void _onMapCreated(GoogleMapController controller, LatLng latLng) {
     mapController = controller;
@@ -32,12 +34,26 @@ class _OrderRequestState extends State<OrderRequest> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    startTimer();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _timer?.cancel();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(milliseconds: 600), (timer) {
+      setState(() {
+        durationToAccept--;
+        if (durationToAccept == 0) {
+          _timer?.cancel();
+          Navigator.of(context).pop(false);
+        }
+      });
+    });
   }
 
   @override
@@ -64,6 +80,16 @@ class _OrderRequestState extends State<OrderRequest> {
             )
           ],
         ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                'Decline',
+                style: kwtextStyleRD(fs: 22, fw: FontWeight.bold, c: kcPrimary),
+              ))
+        ],
       ),
       body: FutureBuilder(
           future:
@@ -156,11 +182,27 @@ class _OrderRequestState extends State<OrderRequest> {
                     ),
                   ),
                   SizedBox(
-                    height: Platform.isAndroid ? 100 : 120.h,
+                    height: Platform.isAndroid ? 100 : 155.h,
                     width: double.infinity,
                     child: Column(
                       children: [
-                        divider(c: kcborderGrey, t: 1),
+                        TweenAnimationBuilder<double>(
+                            tween: Tween(
+                                begin: 1, end: durationToAccept / duration),
+                            duration: const Duration(seconds: 1),
+                            builder: (context, value, _) {
+                              return LinearProgressIndicator(
+                                backgroundColor: kcWhite,
+                                color: kcPrimary,
+                                value: value,
+                              );
+                            }),
+                        gaphr(h: 10),
+                        Text('$durationToAccept seconds to auto-decline',
+                            style: kwtextStyleRD(
+                              c: kcRequestPickupDescrp,
+                              fs: 16,
+                            )),
                         gaphr(h: Platform.isAndroid ? 15 : 20),
                         Padding(
                           padding: padSymR(),
