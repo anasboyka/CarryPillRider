@@ -94,8 +94,7 @@ class _StatusTabDeliveryState extends State<StatusTabDelivery>
                 shape: cornerR(r: 8),
                 onPressed: () async {
                   await FirestoreRepo().updateStatusOrder(
-                      StatusOrder.orderPreparing,
-                      widget.orderService.documentID!);
+                      StatusOrder.driverQueue, widget.orderService.documentID!);
                   setState(() {
                     currentStep = currentStep + 1;
                   });
@@ -432,6 +431,12 @@ class _StatusTabDeliveryState extends State<StatusTabDelivery>
                             minimumSize: const Size(104, 30),
                           ),
                           onPressed: () async {
+                            // print(_processIndex);
+                            if (_processIndex == 1) {
+                              await FirestoreRepo().updateStatusOrder(
+                                  StatusOrder.orderPreparing,
+                                  widget.orderService.documentID!);
+                            }
                             setState(() {
                               if (_processIndex != _processes.length) {
                                 _processIndex = (_processIndex + 1);
