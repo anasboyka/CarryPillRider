@@ -1,12 +1,10 @@
 import 'package:carrypill_rider/constant/constant_color.dart';
 import 'package:carrypill_rider/constant/constant_widget.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
-import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/delivery_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/delivery/delivery_wrapper.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/history/history_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/map/map_tab.dart';
 import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile/profile_tab.dart';
-import 'package:carrypill_rider/presentation/pages/homepage/tab_pages/profile/profile_update.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +29,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           DeliveryWrapper(),
           MapTab(),
+          HistoryTab(),
           ProfileTab(),
         ],
       ),
@@ -51,7 +50,8 @@ class _HomePageState extends State<HomePage> {
           children: [
             iconTabButton(0, 'Delivery', Icons.delivery_dining),
             iconTabButton(1, 'Map', Icons.map),
-            iconTabButton(2, 'profile', Icons.person_outline),
+            iconTabButton(2, 'History', Icons.history),
+            iconTabButton(3, 'profile', Icons.person_outline),
           ],
         ),
       ),
