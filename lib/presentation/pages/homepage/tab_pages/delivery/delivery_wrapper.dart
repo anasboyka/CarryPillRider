@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:carrypill_rider/constant/constant_widget.dart';
 import 'package:carrypill_rider/data/datarepositories/firebase_repo/firestore_repo.dart';
+import 'package:carrypill_rider/data/models/all_enum.dart';
 import 'package:carrypill_rider/data/models/order_service.dart';
 import 'package:carrypill_rider/data/models/rider.dart';
 import 'package:carrypill_rider/data/models/rider_uid.dart';
@@ -82,6 +83,9 @@ class _DeliveryWrapperState extends State<DeliveryWrapper> {
         streamSubscription?.cancel().then((_) => streamSubscription = null);
         await FirestoreRepo(uid: riderId)
             .updateOrderAccepted(order.documentID!);
+        await Future.delayed(const Duration(seconds: 4));
+        await FirestoreRepo()
+            .updateStatusOrder(StatusOrder.driverToHospital, order.documentID!);
         await FirestoreRepo(uid: riderId)
             .updateCurrentOrderId(order.documentID!);
         return true;
