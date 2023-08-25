@@ -1,11 +1,5 @@
 # carrypill rider
 
-This project is a mobile application that is used for rider to deliver medicine to patient.
+This project is a mobile application developed using flutter that is created for follow-up patient to request delivery service or pickup service for their follow-up medication appointment.
 
-## 10 new changes
-
-
-1. Add order status option
-2. Decline order
-3. View service history
-4. View patient current address
+This is for Rider App. For patient App, can refer this link https://github.com/anasboyka/CarryPill
